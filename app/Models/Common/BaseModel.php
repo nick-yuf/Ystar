@@ -76,7 +76,7 @@ class BaseModel extends Model
             return __($item);
         })->toArray();
 
-        return $array[$key] ?? '';
+        return $array[$key] ?? '--';
     }
 
     /**
