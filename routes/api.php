@@ -14,6 +14,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+/**
+ * @var $api Dingo\Api\Routing\Router
+ */
+$api = app('Dingo\Api\Routing\Router');
+
+$api->version(
+    'v1',   //这里的version是版本，里面的v1是在env里面定义好的。
+    [
+        'namespace' => 'App\Api\Controllers',
+        'middleware' => [],
+    ],
+
+    function ($api) {
+        /**
+         * @var $api Dingo\Api\Routing\Router
+         */
+
+        $api->group(['prefix' => 'home'], function ($api) {
+            $api->any('create-model', 'HomeController@createModel')->name('createModel');
+        });
+
+    }
+);
+

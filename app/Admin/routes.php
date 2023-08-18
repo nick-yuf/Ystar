@@ -13,4 +13,10 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('home');
 
+    //order
+    $router->group(['prefix' => 'order', 'as' => 'order.'], function (Router $route) {
+        $route->resource('list', 'OrderController');
+        $route->resource('create', 'OrderController');
+    });
+
 });
