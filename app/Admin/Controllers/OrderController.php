@@ -2,9 +2,6 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\NftIpModel;
-use App\Models\NftPartsModel;
-use App\Models\NftPayModeModel;
 use App\Models\OrderModel;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;

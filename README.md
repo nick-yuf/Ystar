@@ -1,2 +1,2 @@
 # Y-Star
-Y-Star System1
+Y-Star System

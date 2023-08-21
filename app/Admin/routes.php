@@ -19,4 +19,9 @@ Route::group([
         $route->resource('create', 'OrderController');
     });
 
+    //order
+    $router->group(['prefix' => 'car', 'as' => 'car.'], function (Router $route) {
+        $route->resource('list', 'CarController');
+    });
+
 });
