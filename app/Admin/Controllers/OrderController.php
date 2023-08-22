@@ -32,14 +32,14 @@ class OrderController extends AdminController
     {
         $grid = new Grid(new OrderModel());
 
-        $grid->column(OrderModel::F_id, __('订单ID'))->sortable();
-        $grid->column(OrderModel::F_customer_name, __('客户姓名'));
-        $grid->column(OrderModel::F_status, __('订单状态'))->using([
+        $grid->column(OrderModel::F_id, __('ID'))->sortable();
+        $grid->column(OrderModel::F_customer_name, __('Customer name'));
+        $grid->column(OrderModel::F_status, __('Status'))->using([
             0 => '--',
-            1 => '待分配',
-            2 => '进行中',
-            3 => '完成',
-            4 => '作废',
+            1 => __('Standby'),
+            2 => __('Progress'),
+            3 => __('Finish'),
+            4 => __('Cancel'),
         ], '未知')->label([
             0 => 'warning',
             1 => 'warning',
@@ -48,11 +48,11 @@ class OrderController extends AdminController
             4 => 'default',
         ]);
 
-        $grid->column('', __('行程详情'))->modal('行程详情', function ($val) {
-            return new Table(['抵达时间', '航班号', '接送起点', '接送目的地'], $val->travel_info);
+        $grid->column('', __('Trip info'))->modal('Trip info', function ($val) {
+            return new Table(['Reach Time', 'Flight number', 'Begin address', 'Finish address'], $val->travel_info);
         });
 
-        $grid->column(OrderModel::F_created_at, __('创建时间'))->display(function ($val) {
+        $grid->column(OrderModel::F_created_at, __(OrderModel::F_created_at))->display(function ($val) {
             return date('Y-m-d H:i:s', strtotime($val));
         });
 
@@ -63,36 +63,36 @@ class OrderController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed   $id
+     * @param mixed $id
      * @return Show
      */
     protected function detail($id): Show
     {
         $show = new Show(OrderModel::findOrFail($id));
 
-        $show->field(OrderModel::F_sn, __('订单编号'));
-        $show->field(OrderModel::F_customer_name, __('客户姓名'));
-        $show->field(OrderModel::F_customer_phone, __('客户联系方式'));
-        $show->field(OrderModel::F_source, __('客户来源'))->as(function ($val) {
+        $show->field(OrderModel::F_sn, __('SN'));
+        $show->field(OrderModel::F_customer_name, __('Customer name'));
+        $show->field(OrderModel::F_customer_phone, __('Customer phone'));
+        $show->field(OrderModel::F_source, __('Source'))->as(function ($val) {
             return OrderModel::rtnEnumVal(OrderModel::SourceArray, $val);
         });
-        $show->field(OrderModel::F_person_sum, __('成人'));
-        $show->field(OrderModel::F_children_sum, __('儿童'));
-        $show->field(OrderModel::F_box_sum, __('行李数'));
-        $show->field(OrderModel::F_pay_type, __('支付类型'))->as(function ($val) {
+        $show->field(OrderModel::F_person_sum, __('Person') . __('Sum'));
+        $show->field(OrderModel::F_children_sum, __('Children') . __('Sum'));
+        $show->field(OrderModel::F_box_sum, __('Luggage') . __('Sum'));
+        $show->field(OrderModel::F_pay_type, __('Pay type'))->as(function ($val) {
             return OrderModel::rtnEnumVal(OrderModel::PayTypeArray, $val);
         });
-        $show->field(OrderModel::F_pay_currency, __('支付货币种类'))->as(function ($val) {
+        $show->field(OrderModel::F_pay_currency, __('Pay currency'))->as(function ($val) {
             return OrderModel::rtnEnumVal(OrderModel::PayCurrencyArray, $val);
         });
-        $show->field(OrderModel::F_pay_status, __('付款状态'))->as(function ($val) {
+        $show->field(OrderModel::F_pay_status, __('Pay status'))->as(function ($val) {
             return OrderModel::rtnEnumVal(OrderModel::PayStatusArray, $val);
         });
-        $show->field(OrderModel::F_status, __('订单状态'))->as(function ($val) {
+        $show->field(OrderModel::F_status, __('Order') . __('Status'))->as(function ($val) {
             return OrderModel::rtnEnumVal(OrderModel::StatusArray, $val);
         });
-        $show->field(OrderModel::F_created_at, __('创建时间'));
-        $show->field(OrderModel::F_updated_at, __('更新时间'));
+        $show->field(OrderModel::F_created_at, __('Created at'));
+        $show->field(OrderModel::F_updated_at, __('Updated at'));
 
         return $show;
     }
@@ -106,30 +106,30 @@ class OrderController extends AdminController
     {
         $form = new Form(new OrderModel());
 
-        $form->text(OrderModel::F_customer_name, __('客户姓名'))->required();
-        $form->text(OrderModel::F_customer_phone, __('客户联系方式'))->required();
-        $form->select(OrderModel::F_source, __('客户来源'))->options(OrderModel::SourceArray)->default(OrderModel::source_1);
-        $form->number(OrderModel::F_person_sum, __('成人'))->max(100)->default(0);
-        $form->number(OrderModel::F_children_sum, __('儿童'))->max(100)->default(0);
-        $form->number(OrderModel::F_box_sum, __('行李数'))->max(100)->default(0);
-        $form->select(OrderModel::F_pay_type, __('支付类型'))->options(OrderModel::PayTypeArray)->default(OrderModel::pay_type_1);
-        $form->select(OrderModel::F_pay_currency, __('支付货币种类'))->options(OrderModel::PayCurrencyArray)->default(OrderModel::pay_currency_1);
-        $form->select(OrderModel::F_pay_status, __('付款状态'))->options(OrderModel::PayStatusArray)->default(OrderModel::pay_status_1);
-        $form->radio(OrderModel::F_status, __('订单状态'))->options(OrderModel::StatusArray)->default(OrderModel::status_1);
+        $form->text(OrderModel::F_customer_name, __('Customer name'))->required();
+        $form->text(OrderModel::F_customer_phone, __('Customer phone'))->required();
+        $form->select(OrderModel::F_source, __('Source'))->options(OrderModel::SourceArray)->default(OrderModel::source_1);
+        $form->number(OrderModel::F_person_sum, __('Person') . __('Sum'))->max(100)->default(0);
+        $form->number(OrderModel::F_children_sum, __('Children') . __('Sum'))->max(100)->default(0);
+        $form->number(OrderModel::F_box_sum, __('Luggage') . __('Sum'))->max(100)->default(0);
+        $form->select(OrderModel::F_pay_type, __('Pay type'))->options(OrderModel::PayTypeArray)->default(OrderModel::pay_type_1);
+        $form->select(OrderModel::F_pay_currency, __('ay currency'))->options(OrderModel::PayCurrencyArray)->default(OrderModel::pay_currency_1);
+        $form->select(OrderModel::F_pay_status, __('Pay status'))->options(OrderModel::PayStatusArray)->default(OrderModel::pay_status_1);
+        $form->radio(OrderModel::F_status, __('Order') . __('Status'))->options(OrderModel::StatusArray)->default(OrderModel::status_1);
 
-        $form->text(OrderModel::F_remark, __('备注内容'));
-        $form->table(OrderModel::F_travel_info, '行程内容', function ($form) {
-            $form->datetime('reach_time', __('抵达时间'));
-            $form->text('flight_number', __('航班号'));
-            $form->text('begin_address', __('接送起点'));
-            $form->text('finish_address', __('接送目的地'));
+        $form->text(OrderModel::F_remark, __('Notes'));
+        $form->table(OrderModel::F_travel_info, __('Trip info'), function ($form) {
+            $form->datetime('reach_time', __('Reach Time'));
+            $form->text('flight_number', __('Flight number'));
+            $form->text('begin_address', __('Begin address'));
+            $form->text('finish_address', __('Finish address'));
         })->rules('required|array');
 
         $form->saving(function (Form $form) {
-            if(empty($form->travel_info)) {
+            if (empty($form->travel_info)) {
                 $form->travel_info = [];
             }
-            if(empty($form->remark)) {
+            if (empty($form->remark)) {
                 $form->remark = '';
             }
         });

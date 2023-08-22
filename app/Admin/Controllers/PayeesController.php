@@ -3,11 +3,12 @@
 namespace App\Admin\Controllers;
 
 use App\Models\CarModel;
+use App\Models\PayeesModel;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 
-class CarController extends AdminController
+class PayeesController extends AdminController
 {
     /**
      * Title for current resource.
@@ -18,7 +19,7 @@ class CarController extends AdminController
 
     public function __construct()
     {
-        $this->title .= ' ' . __('Car management');
+            $this->title .= ' ' . __('Payees management');
     }
 
     /**
@@ -28,10 +29,11 @@ class CarController extends AdminController
      */
     protected function grid(): Grid
     {
-        $grid = new Grid(new CarModel());
+        $grid = new Grid(new PayeesModel());
 
-        $grid->column(CarModel::F_id, __('ID'))->sortable();
-        $grid->column(CarModel::F_car_type, __('Car type'));
+        $grid->column(PayeesModel::F_id, __('ID'))->sortable();
+        $grid->column(PayeesModel::F_name, __('Name'));
+        $grid->column(PayeesModel::F_phone, __('Contact info'));
 
         $grid->disableExport();
 
@@ -49,9 +51,10 @@ class CarController extends AdminController
      */
     protected function form(): Form
     {
-        $form = new Form(new CarModel());
+        $form = new Form(new PayeesModel());
 
-        $form->text(CarModel::F_car_type, __('Car type'))->required();
+        $form->text(PayeesModel::F_name, __('Name'))->required();
+        $form->text(PayeesModel::F_phone, __('Contact info'))->required();
         $form->footer(function ($footer) {
             // 去掉`查看`checkbox
             $footer->disableViewCheck();
