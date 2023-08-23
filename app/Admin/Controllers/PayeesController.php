@@ -19,7 +19,6 @@ class PayeesController extends AdminController
 
     public function __construct()
     {
-            $this->title .= ' ' . __('Payees management');
     }
 
     /**

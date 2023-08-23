@@ -19,7 +19,6 @@ class OrderController extends BaseController
 
     public function __construct()
     {
-        $this->title .= ' ' . __('order');
     }
 
     /**
@@ -51,7 +50,7 @@ class OrderController extends BaseController
             return new Table(['Reach Time', 'Flight number', 'Begin address', 'Finish address'], $val->travel_info);
         });
 
-        $grid->column(OrderModel::F_created_at, __(OrderModel::F_created_at))->display(function ($val) {
+        $grid->column(OrderModel::F_created_at, __('Created at'))->display(function ($val) {
             return date('Y-m-d H:i:s', strtotime($val));
         });
 

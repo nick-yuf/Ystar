@@ -20,7 +20,6 @@ class CarController extends AdminController
 
     public function __construct()
     {
-        $this->title .= ' ' . __('Car management');
     }
 
     /**
