@@ -3,13 +3,12 @@
 namespace App\Admin\Controllers;
 
 use App\Models\OrderModel;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 
-class OrderController extends AdminController
+class OrderController extends BaseController
 {
     /**
      * Title for current resource.
@@ -108,14 +107,14 @@ class OrderController extends AdminController
 
         $form->text(OrderModel::F_customer_name, __('Customer name'))->required();
         $form->text(OrderModel::F_customer_phone, __('Customer phone'))->required();
-        $form->select(OrderModel::F_source, __('Source'))->options(OrderModel::SourceArray)->default(OrderModel::source_1);
+        $form->select(OrderModel::F_source, __('Source'))->options($this->setLang(OrderModel::SourceArray))->default(OrderModel::source_1);
         $form->number(OrderModel::F_person_sum, __('Person') . __('Sum'))->max(100)->default(0);
         $form->number(OrderModel::F_children_sum, __('Children') . __('Sum'))->max(100)->default(0);
         $form->number(OrderModel::F_box_sum, __('Luggage') . __('Sum'))->max(100)->default(0);
-        $form->select(OrderModel::F_pay_type, __('Pay type'))->options(OrderModel::PayTypeArray)->default(OrderModel::pay_type_1);
-        $form->select(OrderModel::F_pay_currency, __('ay currency'))->options(OrderModel::PayCurrencyArray)->default(OrderModel::pay_currency_1);
-        $form->select(OrderModel::F_pay_status, __('Pay status'))->options(OrderModel::PayStatusArray)->default(OrderModel::pay_status_1);
-        $form->radio(OrderModel::F_status, __('Order') . __('Status'))->options(OrderModel::StatusArray)->default(OrderModel::status_1);
+        $form->select(OrderModel::F_pay_type, __('Pay type'))->options($this->setLang(OrderModel::PayTypeArray))->default(OrderModel::pay_type_1);
+        $form->select(OrderModel::F_pay_currency, __('Pay currency'))->options($this->setLang(OrderModel::PayCurrencyArray))->default(OrderModel::pay_currency_1);
+        $form->select(OrderModel::F_pay_status, __('Pay status'))->options($this->setLang(OrderModel::PayStatusArray))->default(OrderModel::pay_status_1);
+        $form->radio(OrderModel::F_status, __('Order') . __('Status'))->options($this->setLang(OrderModel::StatusArray))->default(OrderModel::status_1);
 
         $form->text(OrderModel::F_remark, __('Notes'));
         $form->table(OrderModel::F_travel_info, __('Trip info'), function ($form) {
@@ -132,6 +131,15 @@ class OrderController extends AdminController
             if (empty($form->remark)) {
                 $form->remark = '';
             }
+        });
+
+        $form->footer(function ($footer) {
+            // 去掉`查看`checkbox
+            $footer->disableViewCheck();
+            // 去掉`继续编辑`checkbox
+            $footer->disableEditingCheck();
+            // 去掉`继续创建`checkbox
+            $footer->disableCreatingCheck();
         });
 
         return $form;

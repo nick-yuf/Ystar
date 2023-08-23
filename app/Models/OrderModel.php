@@ -27,44 +27,43 @@ class OrderModel extends BaseModel
     //支付类型：1现金，2.微信, 3支付宝
     const pay_type_1 = 1, pay_type_2 = 2, pay_type_3 = 3;
     const PayTypeArray = [
-        self::pay_type_1 => '现金',
-        self::pay_type_2 => '微信',
-        self::pay_type_3 => '支付宝',
+        self::pay_type_1 => 'Cash',
+        self::pay_type_2 => 'WeChat pay',
+        self::pay_type_3 => 'Alipay',
     ];
 
     //客户来源：1.线下，2.小红书, 3.其他
     const source_1 = 1, source_2 = 2, source_3 = 3;
     const SourceArray = [
-        self::pay_type_1 => '线下',
-        self::pay_type_2 => '小红书',
-        self::pay_type_3 => '其他',
+        self::pay_type_1 => 'Offline',
+        self::pay_type_2 => 'Red',
+        self::pay_type_3 => 'Other',
     ];
 
     //支付货币种类：1.马币，2.人民币, 3.美元
     const pay_currency_1 = 1, pay_currency_2 = 2, pay_currency_3 = 3;
     const PayCurrencyArray = [
-        self::pay_currency_1 => '马币',
-        self::pay_currency_2 => '人民币',
-        self::pay_currency_3 => '美元',
+        self::pay_currency_1 => 'Ringgit',
+        self::pay_currency_2 => 'RMB',
+        self::pay_currency_3 => 'Dollar',
     ];
 
     //付款状态：1待结算，2已结算，3未结算
     const pay_status_1 = 1, pay_status_2 = 2, pay_status_3 = 3;
     const PayStatusArray = [
-        self::pay_status_1 => '待结算',
-        self::pay_status_2 => '已结算',
-        self::pay_status_3 => '未结算',
+        self::pay_status_1 => 'Pending',
+        self::pay_status_2 => 'Settled',
+        self::pay_status_3 => 'Uncleared',
     ];
 
     //状态：1待派单，2进行中，3完成，4作废
     const status_1 = 1, status_2 = 2, status_3 = 3, status_4 = 4;
     const StatusArray = [
-        self::status_1 => '待派单',
-        self::status_2 => '进行中',
-        self::status_3 => '完成',
-        self::status_4 => '作废',
+        self::status_1 => 'Standby',
+        self::status_2 => 'Progress',
+        self::status_3 => 'Finish',
+        self::status_4 => 'Cancel',
     ];
-
 
 
     public function getTravelInfoAttribute($value): array
