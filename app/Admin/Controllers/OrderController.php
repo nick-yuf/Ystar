@@ -63,7 +63,6 @@ class OrderController extends BaseController
         });
 
 
-
         $grid->column('111', __('Trip info'))->expand(function ($model) {
             return new Table(
                 [__('Reach time'), __('Flight number'), __('Begin address'), __('Finish address'), __('Use begin time'), __('Use finish time')],
@@ -164,6 +163,17 @@ class OrderController extends BaseController
                 $form->remark = '';
             }
         });
+
+        $form->saved(function (Form $form) {
+            $trip = $form->model()->trip_info;
+            if (!empty($trip)) {
+                foreach ($trip as $key => $val) {
+                    $trip[$key][OrderTripModel::F_order_id] = $form->model()->id;
+                }
+                OrderTripModel::getInstance()->addBatch($trip);
+            }
+        });
+
 
         $form->footer(function ($footer) {
             // 去掉`查看`checkbox

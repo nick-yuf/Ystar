@@ -24,7 +24,7 @@ class CarLogic extends BaseLogic
         return $data->map(function ($item) {
             return [
                 'id' => $item[CarModel::F_id],
-                'text' => $item[CarModel::F_desc],
+                'text' => $item[CarModel::F_car_type],
             ];
         })->toArray();
     }

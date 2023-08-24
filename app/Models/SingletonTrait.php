@@ -8,10 +8,7 @@ trait SingletonTrait
     protected static $instance = null;
 
 
-    /**
-     * @return SingletonTrait|null
-     */
-    public static function getInstance(): ?SingletonTrait
+    public static function getInstance()
     {
         if (!(self::$instance instanceof self)) {
             self::$instance = new self;
