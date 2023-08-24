@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\OrderModel;
+use App\Models\OrderTripModel;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -38,7 +39,7 @@ class OrderController extends BaseController
             2 => __('Progress'),
             3 => __('Finish'),
             4 => __('Cancel'),
-        ], '未知')->label([
+        ], __('Unknown'))->label([
             0 => 'warning',
             1 => 'warning',
             2 => 'primary',
@@ -47,8 +48,21 @@ class OrderController extends BaseController
         ]);
 
         $grid->column('', __('Trip info'))->modal('Trip info', function ($val) {
-            return new Table(['Reach Time', 'Flight number', 'Begin address', 'Finish address'], $val->travel_info);
+            return new Table(
+                [__('Reach time'), __('Flight number'), __('Begin address'), __('Finish address'), __('Use begin time'), __('Use finish time')],
+                $val->trip_info,
+                ['table', 'table-bordered', 'table-condensed', 'table-striped']
+            );
         });
+
+//        $grid->column(OrderModel::F_trip_info, __('Trip info'))->expand(function ($model) {
+//            return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
+//                [__('Car type'), $model[CarModel::F_car_type]],
+//                [__('Description'), $model[CarModel::F_desc]],
+//                [__('Transfer fees'), $model[CarModel::F_transfer_fees]],
+//                [__('Rental fees'), $model[CarModel::F_rental_fees]],
+//            ], ['table', 'table-bordered', 'table-condensed', 'table-striped']);
+//        });
 
         $grid->column(OrderModel::F_created_at, __('Created at'))->display(function ($val) {
             return date('Y-m-d H:i:s', strtotime($val));
@@ -110,22 +124,33 @@ class OrderController extends BaseController
         $form->number(OrderModel::F_person_sum, __('Person') . __('Sum'))->max(100)->default(0);
         $form->number(OrderModel::F_children_sum, __('Children') . __('Sum'))->max(100)->default(0);
         $form->number(OrderModel::F_box_sum, __('Luggage') . __('Sum'))->max(100)->default(0);
+        $form->select(OrderModel::F_customer_type, __('Customer type'))->options($this->setLang(OrderModel::CustomerTypeArray))->default(OrderModel::customer_type_1);
         $form->select(OrderModel::F_pay_type, __('Pay type'))->options($this->setLang(OrderModel::PayTypeArray))->default(OrderModel::pay_type_1);
         $form->select(OrderModel::F_pay_currency, __('Pay currency'))->options($this->setLang(OrderModel::PayCurrencyArray))->default(OrderModel::pay_currency_1);
         $form->select(OrderModel::F_pay_status, __('Pay status'))->options($this->setLang(OrderModel::PayStatusArray))->default(OrderModel::pay_status_1);
         $form->radio(OrderModel::F_status, __('Order') . __('Status'))->options($this->setLang(OrderModel::StatusArray))->default(OrderModel::status_1);
+        $form->currency(OrderModel::F_expect_price, __('Expect price'));
+        $form->currency(OrderModel::F_timeout_fees, __('Timeout fees'));
+        $form->currency(OrderModel::F_append_fees, __('Append fees'));
+        $form->currency(OrderModel::F_payment_price, __('Payment price'));
+        $form->currency(OrderModel::F_driver_commission, __('Driver commission'));
+        $form->select(OrderModel::F_payees_id, __('Payees'))->options('/api/payees/select-list')->required();
+        $form->select(OrderModel::F_car_id, __('Car'))->options('/api/car/select-list')->required();
 
-        $form->text(OrderModel::F_remark, __('Notes'));
-        $form->table(OrderModel::F_travel_info, __('Trip info'), function ($form) {
-            $form->datetime('reach_time', __('Reach Time'));
-            $form->text('flight_number', __('Flight number'));
-            $form->text('begin_address', __('Begin address'));
-            $form->text('finish_address', __('Finish address'));
+        $form->textarea(OrderModel::F_remark, __('Notes'))->rows(3);
+        $form->table(OrderModel::F_trip_info, __('Trip info'), function ($form) {
+            $form->datetime(OrderTripModel::F_reach_time, __('Reach time'));
+            $form->text(OrderTripModel::F_flight_number, __('Flight number'));
+            $form->text(OrderTripModel::F_begin_address, __('Begin address'));
+            $form->text(OrderTripModel::F_finish_address, __('Finish address'));
+            $form->datetime(OrderTripModel::F_use_begin_time, __('Use begin time'));
+            $form->datetime(OrderTripModel::F_use_finish_time, __('Use finish time'));
         })->rules('required|array');
 
+        $form->hidden(OrderModel::F_sn)->default('YS' . date('YmdHis'));
         $form->saving(function (Form $form) {
-            if (empty($form->travel_info)) {
-                $form->travel_info = [];
+            if (empty($form->trip_info)) {
+                $form->trip_info = [];
             }
             if (empty($form->remark)) {
                 $form->remark = '';

@@ -1,7 +1,7 @@
 <?php
 /**
  * @auther --
- * @date 2023-08-21 08:57:11
+ * @date 2023-08-24 02:40:43
  */
 namespace App\Models;
 
@@ -17,7 +17,7 @@ class OrderTripModel extends BaseModel
     /*
      * 数据库字段
      */
-    const F_id = 'id',F_order_id = 'order_id',F_reach_time = 'reach_time',F_flight_number = 'flight_number',F_begin_address = 'begin_address',F_finish_address = 'finish_address',F_car_start_time = 'car_start_time',F_car_end_time = 'car_end_time',F_status = 'status';
+    const F_id = 'id',F_order_id = 'order_id',F_reach_time = 'reach_time',F_flight_number = 'flight_number',F_begin_address = 'begin_address',F_finish_address = 'finish_address',F_use_begin_time = 'use_begin_time',F_use_finish_time = 'use_finish_time',F_status = 'status';
 
 
 }

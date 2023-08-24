@@ -9,6 +9,8 @@ use App\Models\Common\BaseModel;
 
 class CarModel extends BaseModel
 {
+    use SingletonTrait;
+
     /**
      * 表名
      */
@@ -19,5 +21,13 @@ class CarModel extends BaseModel
      */
     const F_id = 'id',F_car_type = 'car_type',F_desc = 'desc',F_transfer_fees = 'transfer_fees',F_rental_fees = 'rental_fees',F_images = 'images',F_created_at = 'created_at',F_updated_at = 'updated_at',F_deleted_at = 'deleted_at';
 
+
+    public function getAll()
+    {
+        $query = $this->newQuery();
+        $query->limit(100);
+        $query->orderBy(self::F_id, 'desc');
+        return $query->get();
+    }
 
 }

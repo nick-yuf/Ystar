@@ -35,6 +35,16 @@ $api->version(
             $api->any('create-model', 'HomeController@createModel')->name('createModel');
         });
 
+        $api->group(['prefix' => 'car'], function ($api) {
+            $api->any('list', 'CarController@list')->name('car#list');
+            $api->any('select-list', 'CarController@selectList')->name('car#select-list');
+        });
+
+        $api->group(['prefix' => 'payees'], function ($api) {
+            $api->any('list', 'PayeesController@list')->name('payees#list');
+            $api->any('select-list', 'PayeesController@selectList')->name('payees#select-list');
+        });
+
     }
 );
 
