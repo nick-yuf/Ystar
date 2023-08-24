@@ -2,8 +2,10 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\CarModel;
 use App\Models\OrderModel;
 use App\Models\OrderTripModel;
+use App\Models\PayeesModel;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -31,8 +33,7 @@ class OrderController extends BaseController
     {
         $grid = new Grid(new OrderModel());
 
-        $grid->column(OrderModel::F_id, __('ID'))->sortable();
-        $grid->column(OrderModel::F_customer_name, __('Customer name'));
+        $grid->column(OrderModel::F_sn, __('SN'));
         $grid->column(OrderModel::F_status, __('Status'))->using([
             0 => '--',
             1 => __('Standby'),
@@ -47,13 +48,29 @@ class OrderController extends BaseController
             4 => 'default',
         ]);
 
-        $grid->column('', __('Trip info'))->modal('Trip info', function ($val) {
+
+        $grid->column('', __('Customer info'))->modal(__('Customer info'), function ($model) {
+            return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
+                [__('Customer name'), $model[OrderModel::F_customer_name]],
+                [__('Customer phone'), $model[OrderModel::F_customer_phone]],
+                [__('Person') . __('Sum'), $model[OrderModel::F_person_sum]],
+                [__('Children') . __('Sum'), $model[OrderModel::F_children_sum]],
+                [__('Luggage') . __('Sum'), $model[OrderModel::F_box_sum]],
+                [__('Expect price'), $model[OrderModel::F_expect_price]],
+                [__('Car'), $model['car'][CarModel::F_desc]],
+                [__('Payees'), $model['payees'][PayeesModel::F_name]],
+            ], ['table', 'table-bordered', 'table-condensed', 'table-striped']);
+        });
+
+
+        $grid->column(__('Trip info'), __('Trip info'))->expand(function ($model) {
             return new Table(
                 [__('Reach time'), __('Flight number'), __('Begin address'), __('Finish address'), __('Use begin time'), __('Use finish time')],
-                $val->trip_info,
+                $model->trip_info,
                 ['table', 'table-bordered', 'table-condensed', 'table-striped']
             );
         });
+
 
 //        $grid->column(OrderModel::F_trip_info, __('Trip info'))->expand(function ($model) {
 //            return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
