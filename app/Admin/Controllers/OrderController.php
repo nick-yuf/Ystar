@@ -49,7 +49,7 @@ class OrderController extends BaseController
         ]);
 
 
-        $grid->column('', __('Customer info'))->modal(__('Customer info'), function ($model) {
+        $grid->column('222', __('Customer info'))->modal(__('Customer info'), function ($model) {
             return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
                 [__('Customer name'), $model[OrderModel::F_customer_name]],
                 [__('Customer phone'), $model[OrderModel::F_customer_phone]],
@@ -63,23 +63,14 @@ class OrderController extends BaseController
         });
 
 
-        $grid->column(__('Trip info'), __('Trip info'))->expand(function ($model) {
+
+        $grid->column('111', __('Trip info'))->expand(function ($model) {
             return new Table(
                 [__('Reach time'), __('Flight number'), __('Begin address'), __('Finish address'), __('Use begin time'), __('Use finish time')],
                 $model->trip_info,
                 ['table', 'table-bordered', 'table-condensed', 'table-striped']
             );
         });
-
-
-//        $grid->column(OrderModel::F_trip_info, __('Trip info'))->expand(function ($model) {
-//            return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
-//                [__('Car type'), $model[CarModel::F_car_type]],
-//                [__('Description'), $model[CarModel::F_desc]],
-//                [__('Transfer fees'), $model[CarModel::F_transfer_fees]],
-//                [__('Rental fees'), $model[CarModel::F_rental_fees]],
-//            ], ['table', 'table-bordered', 'table-condensed', 'table-striped']);
-//        });
 
         $grid->column(OrderModel::F_created_at, __('Created at'))->display(function ($val) {
             return date('Y-m-d H:i:s', strtotime($val));
