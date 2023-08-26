@@ -49,11 +49,13 @@ class OrderModel extends BaseModel
     ];
 
     //客户来源：1.线下，2.小红书, 3.其他
-    const source_1 = 1, source_2 = 2, source_3 = 3;
+    const source_1 = 1, source_2 = 2, source_3 = 3, source_4 = 4, source_5 = 5;
     const SourceArray = [
-        self::pay_type_1 => 'Offline',
-        self::pay_type_2 => 'Red',
-        self::pay_type_3 => 'Other',
+        self::source_1 => 'The face',
+        self::source_2 => 'Axon',
+        self::source_3 => 'Embassy',
+        self::source_4 => 'Red',
+        self::source_5 => 'Visitor',
     ];
 
     //支付货币种类：1.马币，2.人民币, 3.美元
