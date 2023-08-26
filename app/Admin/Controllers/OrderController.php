@@ -57,8 +57,8 @@ class OrderController extends BaseController
                 [__('Children') . __('Sum'), $model[OrderModel::F_children_sum]],
                 [__('Luggage') . __('Sum'), $model[OrderModel::F_box_sum]],
                 [__('Expect price'), $model[OrderModel::F_expect_price]],
-                [__('Car'), $model['car'][CarModel::F_desc]],
-                [__('Payees'), $model['payees'][PayeesModel::F_name]],
+                [__('Car'), $model['car']?$model['car'][CarModel::F_desc]:"-"],
+                [__('Payees'), $model['payees']?$model['payees'][PayeesModel::F_name]:"-"],
             ], ['table', 'table-bordered', 'table-condensed', 'table-striped']);
         });
 
