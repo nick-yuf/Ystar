@@ -32,10 +32,10 @@ class OrderController extends BaseController
     protected function grid(): Grid
     {
         $grid = new Grid(new OrderModel());
-
+        $grid->model()->orderByDesc(OrderModel::F_id);
         $grid->column(OrderModel::F_id, __('ID'));
 //        $grid->column(OrderModel::F_sn, __('SN'));
-        $grid->column(OrderModel::F_status, __('Stat    us'))->using([
+        $grid->column(OrderModel::F_status, __('Status'))->using([
             0 => '--',
             1 => __('Standby'),
             2 => __('Progress'),
@@ -58,7 +58,7 @@ class OrderController extends BaseController
                 [__('Children') . __('Sum'), $model[OrderModel::F_children_sum]],
                 [__('Luggage') . __('Sum'), $model[OrderModel::F_box_sum]],
                 [__('Expect price'), $model[OrderModel::F_expect_price]],
-                [__('Car'), $model['car']?$model['car'][CarModel::F_desc]:"-"],
+                [__('Car'), $model['car']?$model['car'][CarModel::F_car_type]:"-"],
                 [__('Payees'), $model['payees']?$model['payees'][PayeesModel::F_name]:"-"],
             ], ['table', 'table-bordered', 'table-condensed', 'table-striped']);
         });
@@ -146,14 +146,14 @@ class OrderController extends BaseController
         $form->select(OrderModel::F_car_id, __('Car'))->options('/api/car/select-list')->required();
 
         $form->textarea(OrderModel::F_remark, __('Notes'))->rows(3);
-        $form->table(OrderModel::F_trip_info, __('Trip info'), function ($form) {
-            $form->datetime(OrderTripModel::F_use_begin_time, __('Use begin time'))->width('140px');
-            $form->datetime(OrderTripModel::F_use_finish_time, __('Use finish time'))->width('100px');
-            $form->text(OrderTripModel::F_flight_number, __('Flight number'));
-            $form->datetime(OrderTripModel::F_reach_time, __('Reach time'))->width('140px');
-            $form->text(OrderTripModel::F_begin_address, __('Begin address'));
-            $form->text(OrderTripModel::F_finish_address, __('Finish address'));
-        });
+        $form->table(OrderModel::F_trip_info, __('Trip info'), function ($table) {
+            $table->datetime(OrderTripModel::F_use_begin_time, __('Use begin time'));
+//            $table->datetime(OrderTripModel::F_use_finish_time, __('Use finish time'));
+            $table->text(OrderTripModel::F_flight_number, __('Flight number'));
+            $table->datetime(OrderTripModel::F_reach_time, __('Reach time'));
+            $table->text(OrderTripModel::F_begin_address, __('Begin address'));
+            $table->text(OrderTripModel::F_finish_address, __('Finish address'));
+        })->setGroupClass( ['table1', 'table-bordered', 'table-condensed', 'table-striped']);
 
         $form->hidden(OrderModel::F_sn)->default('YS' . date('YmdHis'));
         $form->saving(function (Form $form) {
