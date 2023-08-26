@@ -33,8 +33,9 @@ class OrderController extends BaseController
     {
         $grid = new Grid(new OrderModel());
 
-        $grid->column(OrderModel::F_sn, __('SN'));
-        $grid->column(OrderModel::F_status, __('Status'))->using([
+        $grid->column(OrderModel::F_id, __('ID'));
+//        $grid->column(OrderModel::F_sn, __('SN'));
+        $grid->column(OrderModel::F_status, __('Stat    us'))->using([
             0 => '--',
             1 => __('Standby'),
             2 => __('Progress'),
@@ -125,8 +126,8 @@ class OrderController extends BaseController
     {
         $form = new Form(new OrderModel());
 
-        $form->text(OrderModel::F_customer_name, __('Customer name'))->required();
-        $form->text(OrderModel::F_customer_phone, __('Customer phone'))->required();
+        $form->text(OrderModel::F_customer_name, __('Customer name'))->default('');
+        $form->text(OrderModel::F_customer_phone, __('Customer phone'))->default('');
         $form->select(OrderModel::F_source, __('Source'))->options($this->setLang(OrderModel::SourceArray))->default(OrderModel::source_1);
         $form->number(OrderModel::F_person_sum, __('Person') . __('Sum'))->max(100)->default(0);
         $form->number(OrderModel::F_children_sum, __('Children') . __('Sum'))->max(100)->default(0);
@@ -136,7 +137,7 @@ class OrderController extends BaseController
         $form->select(OrderModel::F_pay_currency, __('Pay currency'))->options($this->setLang(OrderModel::PayCurrencyArray))->default(OrderModel::pay_currency_1);
         $form->select(OrderModel::F_pay_status, __('Pay status'))->options($this->setLang(OrderModel::PayStatusArray))->default(OrderModel::pay_status_1);
         $form->radio(OrderModel::F_status, __('Order') . __('Status'))->options($this->setLang(OrderModel::StatusArray))->default(OrderModel::status_1);
-        $form->currency(OrderModel::F_expect_price, __('Expect price'));
+        $form->currency(OrderModel::F_expect_price, __('Expect price'))->width('100px');
         $form->currency(OrderModel::F_timeout_fees, __('Timeout fees'));
         $form->currency(OrderModel::F_append_fees, __('Append fees'));
         $form->currency(OrderModel::F_payment_price, __('Payment price'));
@@ -146,13 +147,13 @@ class OrderController extends BaseController
 
         $form->textarea(OrderModel::F_remark, __('Notes'))->rows(3);
         $form->table(OrderModel::F_trip_info, __('Trip info'), function ($form) {
-            $form->datetime(OrderTripModel::F_reach_time, __('Reach time'));
+            $form->datetime(OrderTripModel::F_use_begin_time, __('Use begin time'))->width('140px');
+            $form->datetime(OrderTripModel::F_use_finish_time, __('Use finish time'))->width('100px');
             $form->text(OrderTripModel::F_flight_number, __('Flight number'));
+            $form->datetime(OrderTripModel::F_reach_time, __('Reach time'))->width('140px');
             $form->text(OrderTripModel::F_begin_address, __('Begin address'));
             $form->text(OrderTripModel::F_finish_address, __('Finish address'));
-            $form->datetime(OrderTripModel::F_use_begin_time, __('Use begin time'));
-            $form->datetime(OrderTripModel::F_use_finish_time, __('Use finish time'));
-        })->rules('required|array');
+        });
 
         $form->hidden(OrderModel::F_sn)->default('YS' . date('YmdHis'));
         $form->saving(function (Form $form) {
