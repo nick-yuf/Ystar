@@ -58,15 +58,15 @@ class OrderController extends BaseController
                 [__('Children') . __('Sum'), $model[OrderModel::F_children_sum]],
                 [__('Luggage') . __('Sum'), $model[OrderModel::F_box_sum]],
                 [__('Expect price'), $model[OrderModel::F_expect_price]],
-                [__('Car'), $model['car']?$model['car'][CarModel::F_car_type]:"-"],
-                [__('Payees'), $model['payees']?$model['payees'][PayeesModel::F_name]:"-"],
+                [__('Car'), $model['car'] ? $model['car'][CarModel::F_car_type] : "-"],
+                [__('Payees'), $model['payees'] ? $model['payees'][PayeesModel::F_name] : "-"],
             ], ['table', 'table-bordered', 'table-condensed', 'table-striped']);
         });
 
 
         $grid->column('111', __('Trip info'))->expand(function ($model) {
             return new Table(
-                [__('Reach time'), __('Flight number'), __('Begin address'), __('Finish address'), __('Use begin time'), __('Use finish time')],
+                [__('Use begin time'), __('Flight number'), __('Reach time'), __('Begin address'), __('Finish address')],
                 $model->trip_info,
                 ['table', 'table-bordered', 'table-condensed', 'table-striped']
             );
@@ -153,7 +153,7 @@ class OrderController extends BaseController
             $table->datetime(OrderTripModel::F_reach_time, __('Reach time'));
             $table->text(OrderTripModel::F_begin_address, __('Begin address'));
             $table->text(OrderTripModel::F_finish_address, __('Finish address'));
-        })->setGroupClass( ['table1', 'table-bordered', 'table-condensed', 'table-striped']);
+        })->setGroupClass(['table1', 'table-bordered', 'table-condensed', 'table-striped']);
 
         $form->hidden(OrderModel::F_sn)->default('YS' . date('YmdHis'));
         $form->saving(function (Form $form) {
