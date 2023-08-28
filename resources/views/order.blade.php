@@ -9,6 +9,13 @@
 </head>
 <body class="is-preload">
 
+@if(empty($data))
+    <header id="header">
+        <a href="#" class="logo">Sorry, ID wrong!</a>
+    </header>
+    {{exit}}
+@endif
+
 <!-- Wrapper -->
 <div id="wrapper">
 

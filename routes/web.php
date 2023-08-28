@@ -17,4 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/admin/lang/{lang}',[App\Http\Controllers\LanguageController::class, 'switchLanguage']);
+Route::get('/admin/order/info', [App\Admin\Controllers\OrderController::class, 'info']);
+
+
+Route::get('/admin/lang/{lang}', [App\Http\Controllers\LanguageController::class, 'switchLanguage']);

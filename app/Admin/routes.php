@@ -16,7 +16,7 @@ Route::group([
     //order
     $router->group(['prefix' => 'order', 'as' => 'order.'], function (Router $route) {
         $route->resource('list', 'OrderController');
-        $route->get('info', 'OrderController@info');
+//        $route->get('info', 'OrderController@info');
     });
 
     //car
