@@ -3,6 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Order\Share;
+use App\Admin\Extensions\OrderExporter;
+use App\Admin\Extensions\PayRecordExporter;
 use App\Models\CarModel;
 use App\Models\OrderModel;
 use App\Models\OrderTripModel;
@@ -85,9 +87,8 @@ class OrderController extends BaseController
 
             $actions->add(new Share());
         });
+        $grid->exporter(new OrderExporter());
 
-
-        $grid->disableExport();
         return $grid;
     }
 

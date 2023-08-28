@@ -42,14 +42,13 @@
 
                     <h3>客户信息</h3>
                     <ul>
-                        <li><b>{{__('Customer name')}}</b>：{{ $data[\App\Models\OrderModel::F_customer_name] }}</li>
+                        <li><b>{{__('Customer type')}}</b>：{{ \App\Models\OrderModel::rtnEnumVal(\App\Models\OrderModel::CustomerTypeArray,$data[\App\Models\OrderModel::F_customer_type]) }}</li>
                         <li><b>{{__('Person') . __('Sum')}}</b>：{{ $data[\App\Models\OrderModel::F_person_sum] }}</li>
                         <li><b>{{__('Children') . __('Sum')}}</b>：{{ $data[\App\Models\OrderModel::F_children_sum] }}</li>
                         <li><b>{{__('Luggage') . __('Sum')}}</b>：{{ $data[\App\Models\OrderModel::F_box_sum] }}</li>
                         <li><b>{{__('Expect price')}}</b>：{{ $data[\App\Models\OrderModel::F_expect_price] }}</li>
                         <li><b>{{__('Car')}}</b>：{{ $data['car'][\App\Models\CarModel::F_car_type] }}</li>
                         <li><b>{{__('Payees')}}</b>：{{ $data['payees'][\App\Models\PayeesModel::F_name] }}</li>
-                        <li><b>{{__('Created at')}}</b>：{{ $data[\App\Models\OrderModel::F_created_at] }}</li>
                     </ul>
                 </div>
             </div>
