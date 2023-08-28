@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Elements Reference - Massively by HTML5 UP</title>
+    <title>Trip info</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}" />
@@ -20,7 +20,7 @@
 <div id="wrapper">
 
     <!-- Header -->
-    <header id="header">
+    <header id="header" style="height: 16rem">
         <a href="#" class="logo">Yottis Star</a>
     </header>
 
