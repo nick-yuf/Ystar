@@ -81,14 +81,14 @@
                 </table>
             </div>
 
-            <form method="post" action="#">
+{{--            <form method="post" action="#">--}}
                     <div class="col-12">
                         <ul class="actions">
                             <li><input type="submit" value="更新状态" class="primary" /></li>
                             <li><input type="reset" value="Reset" /></li>
                         </ul>
                     </div>
-            </form>
+{{--            </form>--}}
 
 
 
