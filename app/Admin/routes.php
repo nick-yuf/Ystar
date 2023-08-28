@@ -16,7 +16,7 @@ Route::group([
     //order
     $router->group(['prefix' => 'order', 'as' => 'order.'], function (Router $route) {
         $route->resource('list', 'OrderController');
-        $route->resource('create', 'OrderController');
+        $route->get('info', 'OrderController@info');
     });
 
     //car
@@ -28,4 +28,5 @@ Route::group([
     $router->group(['prefix' => 'payees', 'as' => 'payees.'], function (Router $route) {
         $route->resource('list', 'PayeesController');
     });
+
 });

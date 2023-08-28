@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Order\Share;
 use App\Models\CarModel;
 use App\Models\OrderModel;
 use App\Models\OrderTripModel;
@@ -10,6 +11,8 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class OrderController extends BaseController
 {
@@ -72,9 +75,17 @@ class OrderController extends BaseController
             );
         });
 
+
         $grid->column(OrderModel::F_created_at, __('Created at'))->display(function ($val) {
             return date('Y-m-d H:i:s', strtotime($val));
         });
+
+        $grid->actions(function ($actions) {
+            $actions->disableView();
+
+            $actions->add(new Share());
+        });
+
 
         $grid->disableExport();
         return $grid;
@@ -170,6 +181,14 @@ class OrderController extends BaseController
             if (!empty($trip)) {
                 foreach ($trip as $key => $val) {
                     $trip[$key][OrderTripModel::F_order_id] = $form->model()->id;
+
+                    if (!isset($trip[$key][OrderTripModel::F_reach_time])) {
+                        $trip[$key][OrderTripModel::F_reach_time] = null;
+                    }
+
+                    if (!isset($trip[$key][OrderTripModel::F_flight_number])) {
+                        $trip[$key][OrderTripModel::F_flight_number] = "";
+                    }
                 }
                 OrderTripModel::getInstance()->addBatch($trip);
             }
@@ -186,5 +205,21 @@ class OrderController extends BaseController
         });
 
         return $form;
+    }
+
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function info()
+    {
+        $id = request()->get('id');
+
+        $data = OrderModel::getInstance()->getOneById($id);
+
+        return view('order', [
+            'data' => $data
+        ]);
     }
 }

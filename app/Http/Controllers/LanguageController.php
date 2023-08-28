@@ -3,17 +3,16 @@
 namespace App\Http\Controllers;
 
 use Session;
-use Illuminate\Http\Request;
 
 class LanguageController extends Controller
 {
     /**
-     * 言語切替
+     * 语言切换
      *
-     * @param string $lang config/language.php のキー
+     * @param string $lang config/language.php
      */
     public function switchLanguage($lang) {
-        if(array_key_exists($lang,config('language'))) {  //登録されている言語の場合
+        if(array_key_exists($lang,config('language'))) {
             Session::put('applocale',$lang);
         }else {
             Session::put('applocale','ch');
