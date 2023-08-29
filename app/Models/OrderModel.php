@@ -104,4 +104,11 @@ class OrderModel extends BaseModel
             ->where(self::F_id, $id)
             ->first();
     }
+
+    public function getTotalByStatus($status = 0): int
+    {
+        return self::query()
+            ->where(self::F_status, $status)
+            ->count();
+    }
 }

@@ -38,8 +38,17 @@ class OrderController extends BaseController
     {
         $grid = new Grid(new OrderModel());
         $grid->model()->orderByDesc(OrderModel::F_id);
+
+        $grid->header(function () {
+            $data = [];
+            foreach (OrderModel::StatusArray as $k => $v) {
+                $count = OrderModel::getInstance()->getTotalByStatus($k);
+                $data[__($v)] = $count;
+            }
+            return view('admin.order-header', compact('data'));
+        });
+
         $grid->column(OrderModel::F_id, __('ID'));
-//        $grid->column(OrderModel::F_sn, __('SN'));
         $grid->column(OrderModel::F_status, __('Status'))->using([
             0 => '--',
             1 => __('Standby'),
