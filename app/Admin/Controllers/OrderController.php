@@ -12,6 +12,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use Illuminate\Support\MessageBag;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -88,9 +89,9 @@ class OrderController extends BaseController
 
         //快捷搜索
         $grid->selector(function (Grid\Tools\Selector $selector) {
-           $cars = CarModel::getInstance()->getAll()->mapWithKeys(function ($item){
+            $cars = CarModel::getInstance()->getAll()->mapWithKeys(function ($item) {
                 return [
-                    $item[CarModel::F_id] =>  $item[CarModel::F_car_type]
+                    $item[CarModel::F_id] => $item[CarModel::F_car_type]
                 ];
             })->toArray();
             $selector->select(OrderModel::F_status, __('Status'), OrderModel::rtnEnumLang(OrderModel::StatusArray));
@@ -187,7 +188,15 @@ class OrderController extends BaseController
         })->setGroupClass(['table1', 'table-bordered', 'table-condensed', 'table-striped']);
 
         $form->hidden(OrderModel::F_sn)->default('YS' . date('YmdHis'));
+
         $form->saving(function (Form $form) {
+            if ($form->status == OrderModel::status_3) {
+                $error = new MessageBag([
+                    'title' => __('Warning'),
+                    'message' => 'Only edit not finish order!',
+                ]);
+                return back()->with(compact('error'));
+            }
             if (empty($form->trip_info)) {
                 $form->trip_info = [];
             }
