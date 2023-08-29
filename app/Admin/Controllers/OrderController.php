@@ -41,19 +41,9 @@ class OrderController extends BaseController
         $grid->paginate(10);
 
         $grid->column(OrderModel::F_id, __('ID'));
-        $grid->column(OrderModel::F_status, __('Status'))->using([
-            0 => '--',
-            1 => __('Standby'),
-            2 => __('Progress'),
-            3 => __('Finish'),
-            4 => __('Cancel'),
-        ], __('Unknown'))->label([
-            0 => 'warning',
-            1 => 'warning',
-            2 => 'primary',
-            3 => 'success',
-            4 => 'default',
-        ]);
+        $grid->column(OrderModel::F_status, __('Status'))
+            ->editable('select', OrderModel::rtnEnumLang(OrderModel::StatusArray))->dot(['primary', 'warning', 'info', 'success', 'default']);
+
         $grid->column('222', __('Customer info'))->modal(__('Customer info'), function ($model) {
             return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
                 [__('Customer name'), $model[OrderModel::F_customer_name]],
@@ -190,9 +180,17 @@ class OrderController extends BaseController
 
         $form->saving(function (Form $form) {
             if ($form->model()->getAttribute(OrderModel::F_status) == OrderModel::status_3) {
+                $message = 'Only edit not finish order';
+                if ($form->input('_editable')) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => $message,
+                        'title' => __('Warning'),
+                    ]);
+                }
                 $error = new MessageBag([
                     'title' => __('Warning'),
-                    'message' => 'Only edit not finish order!',
+                    'message' => $message,
                 ]);
                 return back()->with(compact('error'));
             }
@@ -224,11 +222,8 @@ class OrderController extends BaseController
 
 
         $form->footer(function ($footer) {
-            // 去掉`查看`checkbox
             $footer->disableViewCheck();
-            // 去掉`继续编辑`checkbox
             $footer->disableEditingCheck();
-            // 去掉`继续创建`checkbox
             $footer->disableCreatingCheck();
         });
 
