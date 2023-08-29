@@ -99,4 +99,16 @@ class BaseModel extends Model
         }
         return [];
     }
+
+    /**
+     * @desc Return lang enum value
+     * @param array $array
+     * @return array
+     */
+    public static function rtnEnumLang(array $array): array
+    {
+        return collect($array)->map(function ($item) {
+            return __($item);
+        })->toArray();
+    }
 }

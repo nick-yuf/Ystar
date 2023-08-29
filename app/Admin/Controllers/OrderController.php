@@ -39,7 +39,7 @@ class OrderController extends BaseController
         $grid = new Grid(new OrderModel());
         $grid->model()->orderByDesc(OrderModel::F_id);
 
-        $grid->header(function () {
+        $grid->footer(function () {
             $data = [];
             foreach (OrderModel::StatusArray as $k => $v) {
                 $count = OrderModel::getInstance()->getTotalByStatus($k);
@@ -93,10 +93,25 @@ class OrderController extends BaseController
 
         $grid->actions(function ($actions) {
             $actions->disableView();
-
+            $actions->disableDelete();
             $actions->add(new Share());
         });
         $grid->exporter(new OrderExporter());
+
+//        $grid->quickSearch(function ($model, $query) {
+//            $model->where(OrderModel::F_status, $query)->where(OrderModel::F_status, 'like', $query);
+//        });
+
+        $grid->selector(function (Grid\Tools\Selector $selector) {
+           $cars = CarModel::getInstance()->getAll()->mapWithKeys(function ($item){
+                return [
+                    $item[CarModel::F_id] =>  $item[CarModel::F_car_type]
+                ];
+            })->toArray();
+            $selector->select(OrderModel::F_status, __('Status'), OrderModel::rtnEnumLang(OrderModel::StatusArray));
+            $selector->select(OrderModel::F_customer_type, __('Customer type'), OrderModel::rtnEnumLang(OrderModel::CustomerTypeArray));
+            $selector->select(OrderModel::F_car_id, __('Car'), OrderModel::rtnEnumLang($cars));
+        });
 
         return $grid;
     }
