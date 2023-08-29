@@ -4,7 +4,6 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Order\Share;
 use App\Admin\Extensions\OrderExporter;
-use App\Admin\Extensions\PayRecordExporter;
 use App\Models\CarModel;
 use App\Models\OrderModel;
 use App\Models\OrderTripModel;
@@ -39,14 +38,6 @@ class OrderController extends BaseController
         $grid = new Grid(new OrderModel());
         $grid->model()->orderByDesc(OrderModel::F_id);
         $grid->paginate(10);
-        $grid->footer(function () {
-            $data = [];
-            foreach (OrderModel::StatusArray as $k => $v) {
-                $count = OrderModel::getInstance()->getTotalByStatus($k);
-                $data[__($v)] = $count;
-            }
-            return view('admin.order-header', compact('data'));
-        });
 
         $grid->column(OrderModel::F_id, __('ID'));
         $grid->column(OrderModel::F_status, __('Status'))->using([
@@ -62,8 +53,6 @@ class OrderController extends BaseController
             3 => 'success',
             4 => 'default',
         ]);
-
-
         $grid->column('222', __('Customer info'))->modal(__('Customer info'), function ($model) {
             return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
                 [__('Customer name'), $model[OrderModel::F_customer_name]],
@@ -76,8 +65,6 @@ class OrderController extends BaseController
                 [__('Payees'), $model['payees'] ? $model['payees'][PayeesModel::F_name] : "-"],
             ], ['table', 'table-bordered', 'table-condensed', 'table-striped']);
         });
-
-
         $grid->column('111', __('Trip info'))->expand(function ($model) {
             return new Table(
                 [__('Use begin time'), __('Flight number'), __('Reach time'), __('Begin address'), __('Finish address')],
@@ -85,19 +72,21 @@ class OrderController extends BaseController
                 ['table', 'table-bordered', 'table-condensed', 'table-striped']
             );
         });
-
-
         $grid->column(OrderModel::F_created_at, __('Created at'))->display(function ($val) {
             return date('Y-m-d H:i:s', strtotime($val));
         });
 
+        //行操作
         $grid->actions(function ($actions) {
             $actions->disableView();
             $actions->disableDelete();
             $actions->add(new Share());
         });
+
+        //数据导出
         $grid->exporter(new OrderExporter());
 
+        //快捷搜索
         $grid->selector(function (Grid\Tools\Selector $selector) {
            $cars = CarModel::getInstance()->getAll()->mapWithKeys(function ($item){
                 return [
@@ -107,6 +96,16 @@ class OrderController extends BaseController
             $selector->select(OrderModel::F_status, __('Status'), OrderModel::rtnEnumLang(OrderModel::StatusArray));
             $selector->select(OrderModel::F_customer_type, __('Customer type'), OrderModel::rtnEnumLang(OrderModel::CustomerTypeArray));
             $selector->select(OrderModel::F_car_id, __('Car'), OrderModel::rtnEnumLang($cars));
+        });
+
+        //底部统计
+        $grid->footer(function () {
+            $data = [];
+            foreach (OrderModel::StatusArray as $k => $v) {
+                $count = OrderModel::getInstance()->getTotalByStatus($k);
+                $data[__($v)] = $count;
+            }
+            return view('admin.order-header', compact('data'));
         });
 
         return $grid;
