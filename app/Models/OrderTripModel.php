@@ -5,9 +5,9 @@
  */
 namespace App\Models;
 
-use App\Models\Common\BaseModel;
+use App\Models\Common\BaseToModel;
 
-class OrderTripModel extends BaseModel
+class OrderTripModel extends BaseToModel
 {
     use SingletonTrait;
     /**

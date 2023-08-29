@@ -116,7 +116,6 @@ class OrderController extends BaseController
      * Make a show builder.
      *
      * @param mixed $id
-     * @return Show
      */
     protected function detail($id): Show
     {
@@ -190,26 +189,25 @@ class OrderController extends BaseController
         $form->hidden(OrderModel::F_sn)->default('YS' . date('YmdHis'));
 
         $form->saving(function (Form $form) {
-            if ($form->status == OrderModel::status_3) {
+            if ($form->model()->getAttribute(OrderModel::F_status) == OrderModel::status_3) {
                 $error = new MessageBag([
                     'title' => __('Warning'),
                     'message' => 'Only edit not finish order!',
                 ]);
                 return back()->with(compact('error'));
             }
-            if (empty($form->trip_info)) {
-                $form->trip_info = [];
+            if (empty($form->model()->getAttribute(OrderModel::F_trip_info))) {
+                $form->model()->setAttribute(OrderModel::F_trip_info, []);
             }
-            if (empty($form->remark)) {
-                $form->remark = '';
-            }
+            return $form;
         });
 
         $form->saved(function (Form $form) {
-            $trip = $form->model()->trip_info;
+            $trip = $form->model()->getAttribute(OrderModel::F_trip_info);
+            $orderId = $form->model()->getAttribute(OrderModel::F_id);
             if (!empty($trip)) {
                 foreach ($trip as $key => $val) {
-                    $trip[$key][OrderTripModel::F_order_id] = $form->model()->id;
+                    $trip[$key][OrderTripModel::F_order_id] = $orderId;
 
                     if (!isset($trip[$key][OrderTripModel::F_reach_time])) {
                         $trip[$key][OrderTripModel::F_reach_time] = null;
@@ -219,6 +217,7 @@ class OrderController extends BaseController
                         $trip[$key][OrderTripModel::F_flight_number] = "";
                     }
                 }
+                OrderTripModel::getInstance()->newQuery()->where(OrderTripModel::F_order_id, $orderId)->delete();
                 OrderTripModel::getInstance()->addBatch($trip);
             }
         });
@@ -231,6 +230,11 @@ class OrderController extends BaseController
             $footer->disableEditingCheck();
             // 去掉`继续创建`checkbox
             $footer->disableCreatingCheck();
+        });
+
+        $form->header(function ($actions) {
+            $actions->disableView();
+            $actions->disableDelete();
         });
 
         return $form;
