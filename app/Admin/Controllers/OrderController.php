@@ -38,7 +38,7 @@ class OrderController extends BaseController
     {
         $grid = new Grid(new OrderModel());
         $grid->model()->orderByDesc(OrderModel::F_id);
-
+        $grid->paginate(10);
         $grid->footer(function () {
             $data = [];
             foreach (OrderModel::StatusArray as $k => $v) {
@@ -97,10 +97,6 @@ class OrderController extends BaseController
             $actions->add(new Share());
         });
         $grid->exporter(new OrderExporter());
-
-//        $grid->quickSearch(function ($model, $query) {
-//            $model->where(OrderModel::F_status, $query)->where(OrderModel::F_status, 'like', $query);
-//        });
 
         $grid->selector(function (Grid\Tools\Selector $selector) {
            $cars = CarModel::getInstance()->getAll()->mapWithKeys(function ($item){
