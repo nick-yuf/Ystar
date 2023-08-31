@@ -44,10 +44,10 @@
     "Pay status": "支付状态",
     "Car type": "车型",
     "Car management": "车型管理",
-    "Contact info" : "联系方式",
+    "Contact info": "联系方式",
     "Cash": "现金",
-    "Wechat pay":"微信",
-    "Alipay":"支付宝",
+    "Wechat pay": "微信",
+    "Alipay": "支付宝",
     "Offline": "线下",
     "Red": "小红书",
     "Visitor": "上门客",
@@ -74,8 +74,9 @@
     "Chartered bus": "包车",
     "Customer type": "客户类型",
     "Payees": "收款人",
-    "Car":"车",
+    "Car": "车",
     "Customer info": "客户信息",
     "Share": "分享",
-    "Warning": "警告"
+    "Warning": "警告",
+    "Only edit not finish order": "不允许操作已完成订单"
 }
