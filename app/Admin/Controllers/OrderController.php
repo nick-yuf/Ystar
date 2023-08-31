@@ -180,18 +180,15 @@ class OrderController extends BaseController
 
         $form->saving(function (Form $form) {
             if ($form->model()->getAttribute(OrderModel::F_status) == OrderModel::status_3) {
-                $message = 'Only edit not finish order';
-                if ($form->input('_editable')) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => $message,
-                        'title' => __('Warning'),
-                    ]);
-                }
-                $error = new MessageBag([
+                $json = [
                     'title' => __('Warning'),
-                    'message' => $message,
-                ]);
+                    'message' => __('Only edit not finish order'),
+                    'status' => false,
+                ];
+                if ($form->input('_editable')) {
+                    return response()->json($json);
+                }
+                $error = new MessageBag($json);
                 return back()->with(compact('error'));
             }
             if (empty($form->model()->getAttribute(OrderModel::F_trip_info))) {
