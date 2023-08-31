@@ -29,14 +29,14 @@
                         <div class="u-container-layout u-valign-bottom-lg u-valign-bottom-md u-valign-bottom-sm u-valign-bottom-xl u-container-layout-1">
                             <h6 class="u-text u-text-default u-text-palette-1-base u-text-2"> &nbsp;{{ \App\Models\OrderModel::rtnEnumVal(\App\Models\OrderModel::StatusArray,$data[\App\Models\OrderModel::F_status]) }}</h6>
                             <p class="u-align-left-xs u-text u-text-default u-text-3">
-                                <span style="font-weight: 700;"> &nbsp; &nbsp;{{ \App\Models\OrderModel::rtnEnumVal(\App\Models\OrderModel::CustomerTypeArray,$data[\App\Models\OrderModel::F_customer_type]) }} {{$data[\App\Models\OrderModel::F_trip_info][0][\App\Models\OrderTripModel::F_use_begin_time]??'-'}}</span>
-                                <br>•  {{$data[\App\Models\OrderModel::F_trip_info][0][\App\Models\OrderTripModel::F_begin_address]??'-'}}<br>•  {{$data[\App\Models\OrderModel::F_trip_info][0][\App\Models\OrderTripModel::F_finish_address]??'-'}}<br>
+                                <span style="font-weight: 700;"> &nbsp; &nbsp;{{ \App\Models\OrderModel::rtnEnumVal(\App\Models\OrderModel::CustomerTypeArray,$data[\App\Models\OrderModel::F_customer_type]) }} {{empty($data[\App\Models\OrderModel::F_trip_info])?'-':$data[\App\Models\OrderModel::F_trip_info][0][\App\Models\OrderTripModel::F_use_begin_time]??'-'}}</span>
+                                <br>•  {{empty($data[\App\Models\OrderModel::F_trip_info])?'-':$data[\App\Models\OrderModel::F_trip_info][0][\App\Models\OrderTripModel::F_begin_address]}}<br>•  {{empty($data[\App\Models\OrderModel::F_trip_info])?'-':$data[\App\Models\OrderModel::F_trip_info][0][\App\Models\OrderTripModel::F_finish_address]??'-'}}<br>
                                 <br><b>
                       <span style="font-size: 0.875rem;">航班号：<span style="font-weight: 400;">{{$data[\App\Models\OrderModel::F_trip_info][0][\App\Models\OrderTripModel::F_flight_number]??'-'}}</span>
                       </span><br>
-                                    <span style="font-size: 0.875rem;">航班时间：<span style="font-weight: 400;">{{$data[\App\Models\OrderModel::F_trip_info][0][\App\Models\OrderTripModel::F_reach_time]??'-'}}</span>
+                                    <span style="font-size: 0.875rem;">航班时间：<span style="font-weight: 400;">{{empty($data[\App\Models\OrderModel::F_trip_info])?'-':$data[\App\Models\OrderModel::F_trip_info][0][\App\Models\OrderTripModel::F_reach_time]??'-'}}</span>
                       </span><br>
-                                    <span style="font-size: 0.875rem;">订单车型：<span style="font-weight: 400;">{{ $data['car'][\App\Models\CarModel::F_car_type] }}</span>
+                                    <span style="font-size: 0.875rem;">订单车型：<span style="font-weight: 400;">{{ $data['car'][\App\Models\CarModel::F_car_type]??'-' }}</span>
                       </span><br>
                                     <span style="font-size: 0.875rem;">成人数量：<span style="font-weight: 400;">{{ $data[\App\Models\OrderModel::F_person_sum] }}</span>
                       </span><br>
@@ -46,7 +46,7 @@
                       </span><br>
                                     <span style="font-size: 0.875rem;">订单价格：<span style="font-weight: 400;">{{ $data[\App\Models\OrderModel::F_expect_price] }}</span>
                       </span><br>
-                                    <span style="font-size: 0.875rem;">收款人：<span style="font-weight: 400;">{{ $data['payees'][\App\Models\PayeesModel::F_name] }}</span>
+                                    <span style="font-size: 0.875rem;">收款人：<span style="font-weight: 400;">{{ $data['payees'][\App\Models\PayeesModel::F_name]??'-' }}</span>
                       </span><br>
 
                             </p>

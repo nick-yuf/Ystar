@@ -70,6 +70,12 @@ class OrderController extends BaseController
                 ['table', 'table-bordered', 'table-condensed', 'table-striped']
             );
         });
+
+        $grid->column('333333', __('Share'))->display(function () {
+            $url = env('APP_URL');
+            return "<a href='{$url}/admin/order/info?id={$this->id}' target='_blank'><span class='fa fa-link'></span></a>";
+        });
+
         $grid->column(OrderModel::F_created_at, __('Created at'))->display(function ($val) {
             return date('Y-m-d H:i:s', strtotime($val));
         });
