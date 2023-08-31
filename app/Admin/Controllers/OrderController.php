@@ -42,7 +42,14 @@ class OrderController extends BaseController
 
         $grid->column(OrderModel::F_id, __('ID'));
         $grid->column(OrderModel::F_status, __('Status'))
-            ->editable('select', OrderModel::rtnEnumLang(OrderModel::StatusArray))->dot(['primary', 'warning', 'info', 'success', 'default']);
+            ->editable('select', OrderModel::rtnEnumLang(OrderModel::StatusArray))->dot([
+                OrderModel::status_1 => 'warning',
+                OrderModel::status_3 => 'primary',
+                OrderModel::status_5 => 'primary',
+                OrderModel::status_7 => 'primary',
+                OrderModel::status_9 => 'success',
+                OrderModel::status_11 => 'danger',
+            ]);
 
         $grid->column('222', __('Customer info'))->modal(__('Customer info'), function ($model) {
             return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
