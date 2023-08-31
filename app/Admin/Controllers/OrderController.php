@@ -190,7 +190,7 @@ class OrderController extends BaseController
                 $json = [
                     'title' => __('Warning'),
                     'message' => __('Only edit not finish order'),
-                    'status' => false,
+                    'status' => false
                 ];
                 if ($form->input('_editable')) {
                     return response()->json($json);

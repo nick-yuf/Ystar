@@ -35,6 +35,10 @@ $api->version(
             $api->any('create-model', 'HomeController@createModel')->name('createModel');
         });
 
+        $api->group(['prefix' => 'order'], function ($api) {
+                $api->any('change-status', 'OrderController@changeStatus')->name('order#change-status');
+        });
+
         $api->group(['prefix' => 'car'], function ($api) {
             $api->any('list', 'CarController@list')->name('car#list');
             $api->any('select-list', 'CarController@selectList')->name('car#select-list');

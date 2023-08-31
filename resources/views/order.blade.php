@@ -55,11 +55,48 @@
                 </div>
             </div>
         </div>
-        <a href="https://nicepage.com/css-templates" class="u-btn u-button-style u-btn-1">指派司机</a>
+
+        @switch($data[\App\Models\OrderModel::F_status])
+            @case(\App\Models\OrderModel::status_1)
+                <a href="javascript:void" onclick="changeStatus({{\App\Models\OrderModel::status_3}})" class="u-btn u-button-style u-btn-1">已调度</a>
+            @break;
+            @case(\App\Models\OrderModel::status_3)
+                <a href="javascript:void"  onclick="changeStatus({{\App\Models\OrderModel::status_5}})" class="u-btn u-button-style u-btn-1">已到达</a>
+                @break;
+            @case(\App\Models\OrderModel::status_5)
+                <a href="javascript:void"  onclick="changeStatus({{\App\Models\OrderModel::status_7}})" class="u-btn u-button-style u-btn-1">已送达</a>
+                @break;
+        @endswitch
+
+
         <div class="u-align-center-xs u-border-3 u-border-grey-dark-1 u-expanded-width-xs u-line u-line-horizontal u-line-1"></div>
     </div>
 </section>
-
+<script>
+    function changeStatus(s){
+        $.ajax({
+            url: "/api/order/change-status",
+            method: "POST",
+            dataType: "json",
+            data:{
+                id:  {{$data[\App\Models\OrderModel::F_id]}},
+                status: s
+            },
+            success: function(data) {
+                // 请求成功时的处理代码
+                if(data['statusCode'] === 200) {
+                    alert('操作成功');
+                    location.reload();
+                } else {
+                    alert('操作失败');
+                }
+            },
+            error: function(xhr, status, errorThrown){
+                alert('请求失败');
+            }
+        });
+    }
+</script>
 
 
 <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-1f32"><div class="u-clearfix u-sheet u-valign-middle-xs u-sheet-1">
@@ -76,5 +113,6 @@
         <span>Yottis Star</span>
     </a>.
 </section>
+<script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 
 </body></html>
