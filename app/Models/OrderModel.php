@@ -77,15 +77,16 @@ class OrderModel extends BaseModel
         self::pay_status_3 => 'Uncleared',
     ];
 
-    //状态：1待派单，2进行中，3完成，4作废
-    const status_1 = 1, status_2 = 2, status_3 = 3, status_4 = 4;
+    //状态：1待调度, 3已调度, 5已到达，7已送达, 9完成, 11作废
+    const status_1 = 1, status_3 = 3, status_5 = 5, status_7 = 7, status_9 = 9, status_11 = 11;
     const StatusArray = [
         self::status_1 => 'Standby',
-        self::status_2 => 'Progress',
-        self::status_3 => 'Finish',
-        self::status_4 => 'Cancel',
+        self::status_3 => 'Dispatched',
+        self::status_5 => 'Arrived',
+        self::status_7 => 'Delivered',
+        self::status_9 => 'Finish',
+        self::status_11 => 'Cancel',
     ];
-
 
     public function getTripInfoAttribute($value): array
     {
