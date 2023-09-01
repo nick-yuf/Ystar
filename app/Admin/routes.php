@@ -29,4 +29,9 @@ Route::group([
         $route->resource('list', 'PayeesController');
     });
 
+    //luggage
+    $router->group(['prefix' => 'luggage', 'as' => 'luggage.'], function (Router $route) {
+        $route->resource('list', 'LuggageController');
+    });
+
 });

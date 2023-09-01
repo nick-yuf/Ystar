@@ -81,5 +81,10 @@
     "Customer info": "客户信息",
     "Share": "分享",
     "Warning": "警告",
-    "Only edit not finish order": "不允许操作已完成订单"
+    "Only edit not finish order": "不允许操作已完成订单",
+    "Large": "大",
+    "Medium": "中",
+    "Small": "小",
+    "Size": "尺寸",
+    "Ratio": "比例"
 }
