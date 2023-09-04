@@ -31,6 +31,9 @@ class OrderExporter extends ExcelExporter implements WithMapping
         'car_id' => '车型',
 //        'trip_info' => '行程内容',
         'status' => '状态',
+        'source' => '客户来源',
+        'driver_commission' => '司机佣金',
+        'trip_info' => '用车时间',
     ];
 
     public function map($data): array
@@ -49,6 +52,9 @@ class OrderExporter extends ExcelExporter implements WithMapping
             $data['car'][CarModel::F_car_type],
 //            $data->trip_info,
             OrderModel::rtnEnumVal(OrderModel::StatusArray, $data->status),
+            OrderModel::rtnEnumVal(OrderModel::SourceArray, $data->source),
+            $data->driver_commission,
+            $data->trip_info[0]['use_begin_time'],
         ];
     }
 }

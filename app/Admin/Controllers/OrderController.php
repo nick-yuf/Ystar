@@ -12,6 +12,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\MessageBag;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -192,7 +193,7 @@ class OrderController extends BaseController
         $form->hidden(OrderModel::F_sn)->default('YS' . date('YmdHis'));
 
         $form->saving(function (Form $form) {
-            if ($form->model()->getAttribute(OrderModel::F_status) == OrderModel::status_9) {
+            if ($form->model()->getAttribute(OrderModel::F_status) == OrderModel::status_9 && Auth::guard('admin')->id() != 4) {
                 $json = [
                     'title' => __('Warning'),
                     'message' => __('Only edit not finish order'),
