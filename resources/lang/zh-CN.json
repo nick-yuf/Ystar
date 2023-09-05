@@ -86,5 +86,14 @@
     "Medium": "中",
     "Small": "小",
     "Size": "尺寸",
-    "Ratio": "比例"
+    "Ratio": "比例",
+    "Tips": "提示",
+    "Price info": "价格详细",
+    "Service area": "服务区域",
+    "Custom price": "客户价格",
+    "Commission price": "佣金价格",
+    "Extra fees": "额外费用（夜间）",
+    "Airport": "接送机",
+    "Charter": "包车",
+    "One way": "单程接送"
 }

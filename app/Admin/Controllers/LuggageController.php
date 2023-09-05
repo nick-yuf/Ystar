@@ -17,6 +17,7 @@ class LuggageController extends BaseController
 
     public function __construct()
     {
+        $this->title = __('Luggage');
     }
 
     /**
