@@ -34,8 +34,8 @@ class CarController extends BaseController
         $grid = new Grid(new CarModel());
 
         $grid->column(CarModel::F_id, __('ID'))->expand(function ($model) {
-            $model->price_info = collect($model->price_info)->map(function ($item){
-                $item['type'] = CarPriceModel::rtnEnumVal(CarPriceModel::TypeArray,$item['type']);
+            $model->price_info = collect($model->price_info)->map(function ($item) {
+                $item['type'] = CarPriceModel::rtnEnumVal(CarPriceModel::TypeArray, $item['type']);
                 return $item;
             })->toArray();
             return new Table(
@@ -98,13 +98,13 @@ class CarController extends BaseController
         $form->textarea(CarModel::F_tips, __('Tips'));
         $form->image(CarModel::F_images, __('Image'));
         $form->fieldset(__('Price info'), function (Form $form) {
-            $form->table(CarModel::F_price_info,  __('List'), function ($table) {
+            $form->table(CarModel::F_price_info, __('List'), function ($table) {
                 $table->select(CarPriceModel::F_type, __('Type'))->options($this->setLang(CarPriceModel::TypeArray))->default(CarPriceModel::type_1);
                 $table->text(CarPriceModel::F_service_area, __('Service area'));
-                $table->text(CarPriceModel::F_custom_price, __('Custom price'))->attribute(['style'=>"width: 90px;"]);
-                $table->text(CarPriceModel::F_commission_price, __('Commission price'))->attribute(['style'=>"width: 90px;"]);
-                $table->currency(CarPriceModel::F_timeout_fees, __('Timeout fees'))->attribute(['style'=>"width: 65px;"]);
-                $table->currency(CarPriceModel::F_extra_fees, __('Extra fees'))->attribute(['style'=>"width: 65px;"]);
+                $table->text(CarPriceModel::F_custom_price, __('Custom price'))->attribute(['style' => "width: 90px;"]);
+                $table->text(CarPriceModel::F_commission_price, __('Commission price'))->attribute(['style' => "width: 90px;"]);
+                $table->currency(CarPriceModel::F_timeout_fees, __('Timeout fees'))->attribute(['style' => "width: 65px;"]);
+                $table->currency(CarPriceModel::F_extra_fees, __('Extra fees'))->attribute(['style' => "width: 65px;"]);
             })->setGroupClass(['table1', 'table-bordered', 'table-condensed', 'table-striped']);
         });
 
@@ -121,6 +121,13 @@ class CarController extends BaseController
             if (!empty($prices)) {
                 foreach ($prices as $key => $val) {
                     $prices[$key][CarPriceModel::F_car_id] = $carId;
+                    if (!isset($prices[$key][CarPriceModel::F_timeout_fees])) {
+                        $prices[$key][CarPriceModel::F_timeout_fees] = 0;
+                    }
+
+                    if (!isset($prices[$key][CarPriceModel::F_extra_fees])) {
+                        $prices[$key][CarPriceModel::F_extra_fees] = 0;
+                    }
                 }
                 CarPriceModel::getInstance()->newQuery()->where(CarPriceModel::F_car_id, $carId)->delete();
                 CarPriceModel::getInstance()->addBatch($prices);
