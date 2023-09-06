@@ -43,4 +43,11 @@ class CarModel extends BaseModel
         return $query->get();
     }
 
+
+    public function getOneById($id)
+    {
+        return self::query()
+            ->where(self::F_id, $id)
+            ->first();
+    }
 }

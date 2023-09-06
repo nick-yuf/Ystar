@@ -40,6 +40,7 @@
     "SN": "订单编号",
     "Source": "来源",
     "Person": "成人",
+    "Adult": "成人",
     "Children": "儿童",
     "Luggage": "行李",
     "Pay type": "支付类型",
@@ -95,5 +96,8 @@
     "Extra fees": "额外费用（夜间）",
     "Airport": "接送机",
     "Charter": "包车",
-    "One way": "单程接送"
+    "One way": "单程接送",
+    "Case": "方案",
+    "Price": "价格",
+    "Library": "库"
 }

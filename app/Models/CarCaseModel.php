@@ -9,6 +9,7 @@ use App\Models\Common\BaseToModel;
 
 class CarCaseModel extends BaseToModel
 {
+    use SingletonTrait;
 
     public $timestamps = false;
 
@@ -22,5 +23,14 @@ class CarCaseModel extends BaseToModel
      */
     const F_id = 'id',F_car_id = 'car_id',F_large = 'large',F_medium = 'medium',F_small = 'small',F_adult = 'adult',F_children = 'children';
 
+
+    public function getTotalByCarId($carId = 0): int
+    {
+        $query = $this->newQuery();
+        if ($carId) {
+            $query->where(self::F_car_id, $carId);
+        }
+        return $query->count();
+    }
 
 }

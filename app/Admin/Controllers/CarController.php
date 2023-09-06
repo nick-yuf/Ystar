@@ -2,9 +2,10 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Car\CarCase;
+use App\Models\CarCaseModel;
 use App\Models\CarModel;
 use App\Models\CarPriceModel;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -32,8 +33,16 @@ class CarController extends BaseController
     protected function grid(): Grid
     {
         $grid = new Grid(new CarModel());
+        $grid->quickSearch(CarModel::F_car_type)->placeholder(__('Car type'));
+        $grid->column(CarModel::F_car_type, __('Car type'))->modal(__('Car type'), function ($model) {
+            return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
+                [__('Car type'), $model[CarModel::F_car_type]],
+                [__('Description'), $model[CarModel::F_desc]],
+                [__('Tips'), $model[CarModel::F_tips]],
+            ], ['table', 'table-bordered', 'table-condensed', 'table-striped']);
+        });
 
-        $grid->column(CarModel::F_id, __('ID'))->expand(function ($model) {
+        $grid->column('Price', __('Price'))->expand(function ($model) {
             $model->price_info = collect($model->price_info)->map(function ($item) {
                 $item['type'] = CarPriceModel::rtnEnumVal(CarPriceModel::TypeArray, $item['type']);
                 return $item;
@@ -45,19 +54,17 @@ class CarController extends BaseController
             );
         });
 
-        $grid->column(CarModel::F_car_type, __('Car type'))->modal(__('Car type'), function ($model) {
-            return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
-                [__('Car type'), $model[CarModel::F_car_type]],
-                [__('Description'), $model[CarModel::F_desc]],
-                [__('Tips'), $model[CarModel::F_tips]],
-            ], ['table', 'table-bordered', 'table-condensed', 'table-striped']);
+        $grid->column(CarModel::F_id, __('Case') . __('Sum'))->display(function ($id) {
+            $count = CarCaseModel::getInstance()->getTotalByCarId($id);
+            return "<span class='label label-primary'>{$count}</span>";
         });
-
 
         $grid->disableExport();
 
         $grid->actions(function ($actions) {
             $actions->disableView();
+            $actions->disableDelete();
+            $actions->add(new CarCase());
         });
 
         return $grid;
