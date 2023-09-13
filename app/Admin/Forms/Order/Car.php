@@ -77,7 +77,7 @@ function recommend () {
 }
 </script>
 ');
-        $this->select(OrderModel::F_car_id, __('Car'))->options('/api/car/select-list');
+        $this->select(OrderModel::F_car_id, __('Car'))->options('/api/car/select-list')->required();
 
     }
 
