@@ -32,7 +32,7 @@ Route::group([
 
     //luggage
     $router->group(['prefix' => 'luggage'], function (Router $route) {
-        $route->resource('list', 'LuggageController');
+        $route->resource('list', 'LuggageController')->names('luggage#list');
     });
 
 });
