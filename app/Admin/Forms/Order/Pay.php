@@ -89,18 +89,16 @@ class Pay extends StepForm
         }
 
         if (isset($data['Car']['save_case'])) {
-            $caseData = [
-                CarCaseModel::F_adult => $adult,
-                CarCaseModel::F_children => $children,
-                CarCaseModel::F_large => $large,
-                CarCaseModel::F_medium => $medium,
-                CarCaseModel::F_small => $small,
-            ];
-            $data = CarCaseModel::getInstance()->newQuery()->where($caseData)->first();
-
-            if (!$data) {
-                $caseData[CarCaseModel::F_car_id] = $carId;
-                CarCaseModel::getInstance()->addOne($caseData);
+            $case = CarCaseModel::getInstance()->getOneCase($adult, $children, $large, $medium, $small);
+            if (!$case) {
+                CarCaseModel::getInstance()->addOne([
+                    CarCaseModel::F_adult => $adult,
+                    CarCaseModel::F_children => $children,
+                    CarCaseModel::F_large => $large,
+                    CarCaseModel::F_medium => $medium,
+                    CarCaseModel::F_small => $small,
+                    CarCaseModel::F_car_id => $carId
+                ]);
             }
         }
 

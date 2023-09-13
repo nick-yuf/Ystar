@@ -44,14 +44,7 @@ class CarLogic extends BaseLogic
      */
     public function recommend($adult, $children, $large, $medium, $small): array
     {
-        $data = CarCaseModel::getInstance()->newQuery()->where([
-            CarCaseModel::F_adult => $adult,
-            CarCaseModel::F_children => $children,
-            CarCaseModel::F_large => $large,
-            CarCaseModel::F_medium => $medium,
-            CarCaseModel::F_small => $small,
-        ])->first();
-
+        $data = CarCaseModel::getInstance()->getOneCase($adult, $children, $large, $medium, $small);
         if (!$data) {
             throw new ApiException('No recommend.');
         }

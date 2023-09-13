@@ -7,6 +7,7 @@ use App\Models\CarCaseModel;
 use App\Models\CarModel;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Illuminate\Support\MessageBag;
 
 class CarCaseController extends BaseController
 {
@@ -80,6 +81,28 @@ class CarCaseController extends BaseController
         $form->number(CarCaseModel::F_adult, __('Adult'))->default(0);
         $form->number(CarCaseModel::F_children, __('Children'))->default(0);
 
+        $form->saving(function (Form $form) {
+            $case = CarCaseModel::getInstance()->getOneCase(
+                $form->adult,
+                $form->children,
+                $form->large,
+                $form->medium,
+                $form->small
+            );
+
+            if ($case) {
+                $json = [
+                    'title' => __('Warning'),
+                    'message' => __('Case already exist'),
+                    'status' => false
+                ];
+                $error = new MessageBag($json);
+                return back()->with(compact('error'));
+            }
+
+            return $form;
+        });
+
         $form->footer(function (Form\Footer $footer) {
             // 去掉`查看`checkbox
             $footer->disableViewCheck();
@@ -88,6 +111,7 @@ class CarCaseController extends BaseController
             // 去掉`继续创建`checkbox
             $footer->disableCreatingCheck();
         });
+
         $url = $this->getRouteByName('car#case-list', 'index', ['carId' => $carId]);
         $form->header(function (Form\Tools $actions) use ($url) {
             $actions->disableList();
