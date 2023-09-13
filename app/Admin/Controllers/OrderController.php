@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Order\Share;
 use App\Admin\Extensions\OrderExporter;
+use App\Models\AdminUsersModel;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Widgets\MultipleSteps;
@@ -80,8 +81,10 @@ class OrderController extends BaseController
             return "<a href='{$url}/admin/order/info?id={$this->id}' target='_blank'><span class='fa fa-link'></span></a>";
         });
 
+        $grid->column('user.name', __('User'));
+
         $grid->column(OrderModel::F_created_at, __('Created at'))->display(function ($val) {
-            return date('Y-m-d H:i:s', strtotime($val));
+            return date('Y-m-d', strtotime($val));
         });
 
         $grid->tools(function (Grid\Tools $tools) {
@@ -133,9 +136,6 @@ class OrderController extends BaseController
             'Pay' => Order\Pay::class,
         ];
 
-//        return $content
-//            ->title(trans('admin.new'). __('Order'))
-//            ->body(Tab::forms($forms));
         $s = request('step');
         $title = [];
         foreach ($forms as $k => $v) {

@@ -33,6 +33,11 @@ class OrderModel extends BaseModel
         return $this->hasOne(PayeesModel::class, PayeesModel::F_id, self::F_payees_id);
     }
 
+    public function user(): HasOne
+    {
+        return $this->hasOne(AdminUsersModel::class, AdminUsersModel::F_id, self::F_user_id);
+    }
+
 
     //客户类型：1接机，2送机，3包车
     const customer_type_1 = 1, customer_type_2 = 2, customer_type_3 = 3;
