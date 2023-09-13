@@ -35,6 +35,7 @@ class BaseModel extends Model
         if ($this->timestamps) {
             $data['created_at'] = date('Y-m-d H:i:s');
         }
+
         return self::query()->insertGetId($data);
     }
 

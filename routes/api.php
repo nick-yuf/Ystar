@@ -23,7 +23,7 @@ $api->version(
     'v1',   //这里的version是版本，里面的v1是在env里面定义好的。
     [
         'namespace' => 'App\Api\Controllers',
-        'middleware' => [],
+        'middleware' => ['responseTransForm'],
     ],
 
     function ($api) {
@@ -42,6 +42,7 @@ $api->version(
         $api->group(['prefix' => 'car'], function ($api) {
             $api->any('list', 'CarController@list')->name('car#list');
             $api->any('select-list', 'CarController@selectList')->name('car#select-list');
+            $api->any('recommend', 'CarController@recommend')->name('car#recommend');
         });
 
         $api->group(['prefix' => 'payees'], function ($api) {

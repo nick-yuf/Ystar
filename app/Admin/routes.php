@@ -14,8 +14,9 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
 
     //order
-    $router->group(['prefix' => 'order', 'as' => 'order.'], function (Router $route) {
-        $route->resource('list', 'OrderController');
+    $router->group(['prefix' => 'order'], function (Router $route) {
+        $route->resource('list', 'OrderController')->names('order#list');
+        $route->get('tab-form', 'OrderController@tabForm')->name('order#tab-form');
     });
 
     //car
@@ -25,12 +26,12 @@ Route::group([
     });
 
     //payees
-    $router->group(['prefix' => 'payees', 'as' => 'payees.'], function (Router $route) {
+    $router->group(['prefix' => 'payees'], function (Router $route) {
         $route->resource('list', 'PayeesController');
     });
 
     //luggage
-    $router->group(['prefix' => 'luggage', 'as' => 'luggage.'], function (Router $route) {
+    $router->group(['prefix' => 'luggage'], function (Router $route) {
         $route->resource('list', 'LuggageController');
     });
 

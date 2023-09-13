@@ -4,13 +4,16 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Order\Share;
 use App\Admin\Extensions\OrderExporter;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Layout\Content;
+use Encore\Admin\Widgets\MultipleSteps;
+use App\Admin\Forms\Order;
 use App\Models\CarModel;
 use App\Models\OrderModel;
 use App\Models\OrderTripModel;
 use App\Models\PayeesModel;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\MessageBag;
@@ -81,6 +84,11 @@ class OrderController extends BaseController
             return date('Y-m-d H:i:s', strtotime($val));
         });
 
+        $grid->tools(function (Grid\Tools $tools) {
+            $url = $this->getRouteByName('order#tab-form', '');
+            $tools->append('<a class="btn btn-sm btn-success" href="' . $url . '" ><i class="fa fa-plus"></i><span class="hidden-xs">  智能' . trans('admin.new') . '</span></a>');
+        });
+
         //行操作
         $grid->actions(function ($actions) {
             $actions->disableView();
@@ -116,46 +124,36 @@ class OrderController extends BaseController
         return $grid;
     }
 
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     */
-    protected function detail($id): Show
+    protected function tabForm(Content $content): Content
     {
-        $show = new Show(OrderModel::findOrFail($id));
+        $forms = [
+            'Basic' => Order\Basic::class,
+            'Trip' => Order\Trip::class,
+            'Car' => Order\Car::class,
+            'Pay' => Order\Pay::class,
+        ];
 
-        $show->field(OrderModel::F_sn, __('SN'));
-        $show->field(OrderModel::F_customer_name, __('Customer name'));
-        $show->field(OrderModel::F_customer_phone, __('Customer phone'));
-        $show->field(OrderModel::F_source, __('Source'))->as(function ($val) {
-            return OrderModel::rtnEnumVal(OrderModel::SourceArray, $val);
-        });
-        $show->field(OrderModel::F_person_sum, __('Person') . __('Sum'));
-        $show->field(OrderModel::F_children_sum, __('Children') . __('Sum'));
-        $show->field(OrderModel::F_box_sum, __('Luggage') . __('Sum'));
-        $show->field(OrderModel::F_pay_type, __('Pay type'))->as(function ($val) {
-            return OrderModel::rtnEnumVal(OrderModel::PayTypeArray, $val);
-        });
-        $show->field(OrderModel::F_pay_currency, __('Pay currency'))->as(function ($val) {
-            return OrderModel::rtnEnumVal(OrderModel::PayCurrencyArray, $val);
-        });
-        $show->field(OrderModel::F_pay_status, __('Pay status'))->as(function ($val) {
-            return OrderModel::rtnEnumVal(OrderModel::PayStatusArray, $val);
-        });
-        $show->field(OrderModel::F_status, __('Order') . __('Status'))->as(function ($val) {
-            return OrderModel::rtnEnumVal(OrderModel::StatusArray, $val);
-        });
-        $show->field(OrderModel::F_created_at, __('Created at'));
-        $show->field(OrderModel::F_updated_at, __('Updated at'));
+//        return $content
+//            ->title(trans('admin.new'). __('Order'))
+//            ->body(Tab::forms($forms));
+        $s = request('step');
+        $title = [];
+        foreach ($forms as $k => $v) {
+            if (empty($s) && $k == 'Basic') {
+                $title[] = '<b style="font-size: 18px">' . __($k) . '</b>';
+            } else {
+                $title[] = $s == $k && !empty($s) ? '<b style="font-size: 18px">' . __($k) . '</b>' : '<span style="font-size: 18px">' . __($k) . '</span>';
+            }
+        }
 
-        return $show;
+        return $content
+            ->title(implode('&nbsp;<span style="font-size: 18px">></span>&nbsp;', $title))
+            ->body(MultipleSteps::make($forms));
     }
 
     /**
      * Make a form builder.
      *
-     * @return Form
      */
     protected function form(): Form
     {
@@ -191,6 +189,7 @@ class OrderController extends BaseController
         })->setGroupClass(['table1', 'table-bordered', 'table-condensed', 'table-striped']);
 
         $form->hidden(OrderModel::F_sn)->default('YS' . date('YmdHis'));
+        $form->hidden(OrderModel::F_user_id)->default(Admin::user()->id);
 
         $form->saving(function (Form $form) {
             if ($form->model()->getAttribute(OrderModel::F_status) == OrderModel::status_9 && Auth::guard('admin')->id() != 4) {
@@ -207,6 +206,9 @@ class OrderController extends BaseController
             }
             if (empty($form->model()->getAttribute(OrderModel::F_trip_info))) {
                 $form->model()->setAttribute(OrderModel::F_trip_info, []);
+            }
+            if (empty($form->model()->getAttribute(OrderModel::F_case_info))) {
+                $form->model()->setAttribute(OrderModel::F_case_info, []);
             }
             return $form;
         });

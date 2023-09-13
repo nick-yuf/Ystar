@@ -99,5 +99,9 @@
     "One way": "单程接送",
     "Case": "方案",
     "Price": "价格",
-    "Library": "库"
+    "Library": "库",
+    "Trip": "行程",
+    "Basic": "基础",
+    "Pay": "支付",
+    "Recommend": "推荐"
 }

@@ -2,7 +2,9 @@
 
 namespace App\Api\Logic;
 
+use App\Exceptions\ApiException;
 use App\Logic\BaseLogic;
+use App\Models\CarCaseModel;
 use App\Models\CarModel;
 
 class CarLogic extends BaseLogic
@@ -27,7 +29,37 @@ class CarLogic extends BaseLogic
                 'text' => $item[CarModel::F_car_type],
             ];
         })->toArray();
+
     }
 
+    /**
+     * @desc  推荐车型
+     * @param $adult
+     * @param $children
+     * @param $large
+     * @param $medium
+     * @param $small
+     * @return array
+     * @throws ApiException
+     */
+    public function recommend($adult, $children, $large, $medium, $small): array
+    {
+        $data = CarCaseModel::getInstance()->newQuery()->where([
+            CarCaseModel::F_adult => $adult,
+            CarCaseModel::F_children => $children,
+            CarCaseModel::F_large => $large,
+            CarCaseModel::F_medium => $medium,
+            CarCaseModel::F_small => $small,
+        ])->first();
+
+        if (!$data) {
+            throw new ApiException('No recommend.');
+        }
+
+        return [
+            CarCaseModel::F_car_id => $data[CarCaseModel::F_car_id],
+            CarModel::F_car_type => $data['car'][CarModel::F_car_type],
+        ];
+    }
 
 }

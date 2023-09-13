@@ -6,6 +6,7 @@
 namespace App\Models;
 
 use App\Models\Common\BaseToModel;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class CarCaseModel extends BaseToModel
 {
@@ -22,6 +23,12 @@ class CarCaseModel extends BaseToModel
      * 数据库字段
      */
     const F_id = 'id',F_car_id = 'car_id',F_large = 'large',F_medium = 'medium',F_small = 'small',F_adult = 'adult',F_children = 'children';
+
+
+    public function car(): HasOne
+    {
+        return $this->hasOne(CarModel::class, CarModel::F_id, self::F_car_id);
+    }
 
 
     public function getTotalByCarId($carId = 0): int

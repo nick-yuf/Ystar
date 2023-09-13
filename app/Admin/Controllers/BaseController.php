@@ -27,7 +27,12 @@ class BaseController extends AdminController
     function getRouteByName($name, string $action = 'index', array $param = []): string
     {
         $domain = str_replace(Request::path(), '', Request::url());
-        $url = $domain . Route::getRoutes()->getByName($name . '.' . $action)->uri;
+        $name .= $action ? '.' . $action : '';
+        $route = Route::getRoutes()->getByName($name);
+        if (empty($route)) {
+            return '';
+        }
+        $url = $domain . $route->uri;
         if ($param) {
             $url .= '?' . http_build_query($param);
         }
