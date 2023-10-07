@@ -45,7 +45,7 @@ class OrderController extends BaseController
         $grid->paginate(10);
 
         $grid->column(OrderModel::F_id, __('ID'));
-        $grid->column(OrderModel::F_status, __('Status'))
+        $grid->column(OrderModel::F_status, __('Order') . __('Status'))
             ->editable('select', OrderModel::rtnEnumLang(OrderModel::StatusArray))->dot([
                 OrderModel::status_1 => 'warning',
                 OrderModel::status_3 => 'primary',
