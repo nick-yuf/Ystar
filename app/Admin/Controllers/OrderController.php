@@ -4,7 +4,6 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Order\Share;
 use App\Admin\Extensions\OrderExporter;
-use App\Models\AdminUsersModel;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Widgets\MultipleSteps;
@@ -158,7 +157,7 @@ class OrderController extends BaseController
     protected function form(): Form
     {
         $form = new Form(new OrderModel());
-       
+
         $form->text(OrderModel::F_customer_name, __('Customer name'))->default('');
         $form->text(OrderModel::F_customer_phone, __('Customer phone'))->default('');
         $form->select(OrderModel::F_source, __('Source'))->options($this->setLang(OrderModel::SourceArray))->default(OrderModel::source_1);

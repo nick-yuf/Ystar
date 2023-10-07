@@ -35,4 +35,8 @@ Route::group([
         $route->resource('list', 'LuggageController')->names('luggage#list');
     });
 
+    //chart
+    $router->group(['prefix' => 'chart'], function (Router $route) {
+        $route->resource('index', 'ChartController@index')->names('chart#index');
+    });
 });
