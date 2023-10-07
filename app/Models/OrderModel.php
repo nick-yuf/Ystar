@@ -143,7 +143,7 @@ class OrderModel extends BaseModel
         return $query->count();
     }
 
-    public function getSumWithMonth($start, $end, $payStatus, $status): int
+    public function getSumWithMonth($start, $end, $payStatus, $status, $sumColumn = self::F_payment_price): int
     {
         $query = self::query();
         if ($start) {
@@ -158,7 +158,7 @@ class OrderModel extends BaseModel
         if ($payStatus) {
             $query = $query->whereIn(self::F_pay_status, $payStatus);
         }
-        return $query->sum(self::F_payment_price);
+        return $query->sum($sumColumn);
     }
 
 

@@ -67,11 +67,15 @@ class HomeController extends Controller
 
         //总收入
         $totalPay = OrderModel::getInstance()->getSumWithMonth('', '', [OrderModel::pay_status_2], [OrderModel::status_9]);
+        //佣金
+        $totalDriver = OrderModel::getInstance()->getSumWithMonth('', '', [OrderModel::pay_status_2], [OrderModel::status_9], OrderModel::F_driver_commission);
+        //营收
+        $paySum = $totalPay - $totalDriver;
 
         return $content
             ->header('chart')
             ->description('统计')
-            ->body(new Box('订单总数：' . $orderTotal . ' 总收入：' . $totalPay, view('chart.order', $chartParams),
+            ->body(new Box('[订单总数：' . $orderTotal . ']、[总收入：' . $totalPay . ']、[佣金：' . $totalDriver . ']、[营收：' . $paySum . ']', view('chart.order', $chartParams),
                 new Table(
                     ['月份', '总单数', '完成单数', '进行中单数', '作废单数', '单月已结算', '单月未结算'],
                     $tableData
