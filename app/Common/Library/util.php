@@ -11,6 +11,21 @@ class util
         })->toArray();
     }
 
+    /**
+     * 获取指定时间戳所在的月份的开始时间戳和结束时间戳
+     *
+     * @param int $timestamp
+     * @return array(开始时间,结束时间)
+     */
+    static function getMonthBeginAndEnd(int $timestamp = 0): array
+    {
+        $timestamp = $timestamp ? $timestamp : time();
+        $year = date('Y', $timestamp);
+        $month = date('m', $timestamp);
+        $d = date('t', strtotime($year . '-' . $month));
+        return ['begin' => strtotime($year . '-' . $month), 'end' => mktime(23, 59, 59, $month, $d, $year)];
+    }
+
 
     /**
      * 驼峰命名转下划线命名

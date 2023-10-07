@@ -2,77 +2,82 @@
 
 namespace App\Admin\Controllers;
 
+use App\Common\Library\util;
 use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\Dashboard;
-use Encore\Admin\Layout\Column;
+use App\Models\OrderModel;
 use Encore\Admin\Layout\Content;
-use Encore\Admin\Layout\Row;
 use Encore\Admin\Widgets\Box;
 use Encore\Admin\Widgets\Table;
 
 class HomeController extends Controller
 {
-    public function index(Content $content)
+    public function index(Content $content): Content
     {
-//        return $content
-//            ->header('Dashboard')
-//            ->description('Description...')
-//            ->body(function (Row $row) {
-////                $row->column(6, function (Column $column) {
-////                    $column->row(Dashboard::title());
-//////                    $column->row(new Examples\Tickets());
-////                });
-//
-//                $row->column(6, function (Column $column) {
-//                    $column->row(function (Row $row) {
-//                        $row->column(6, new Examples\NewUsers());
-//                        $row->column(6, new Examples\NewDevices());
-//                    });
-//
-//                    $column->row(new Examples\Sessions());
-//                    $column->row(new Examples\ProductOrders());
-//                });
-//            });
+        $statusArray = OrderModel::rtnEnumLang(OrderModel::StatusArray);
+        $groupData = OrderModel::getInstance()->groupByStatus()->mapWithKeys(function ($item) {
+            return [$item['status'] => $item['count']];
+        })->toArray();
+
+        $chartData = [];
+        $orderTotal = 0;
+        foreach ($statusArray as $k => $v) {
+            $count = $groupData[$k] ?? 0;
+            $orderTotal += $count;
+            $chartData [] = [
+                'status' => $k,
+                'desc' => $v,
+                'count' => $count
+            ];
+        }
+
+        $chartParams = [
+            'labels' => array_values($statusArray),
+            'data' => $chartData
+        ];
+
+        for ($i = 0; $i < 6; $i++) {
+            $month[] = date('Y-m', strtotime('-' . $i . 'month'));//包含本月
+        }
+
+        $tableData = [];
+        //查询最近半年数据
+        foreach ($month as $v) {
+            $times = util::getMonthBeginAndEnd(strtotime($v));
+            $begin = date('Y-m-d', $times['begin']);
+            $end = date('Y-m-d', $times['end']);
+
+            //单月个数
+            $count = OrderModel::getInstance()->getTotalByTime($begin, $end);
+
+            //单月已结算
+            $payFinish = OrderModel::getInstance()->getSumWithMonth($begin, $end, [OrderModel::pay_status_2], [OrderModel::status_9]);
+
+            //单月未结算
+            $unPay = OrderModel::getInstance()->getSumWithMonth($begin, $end, [OrderModel::pay_status_1, OrderModel::pay_status_3], []);
+
+            $tableData[] = [
+                $v, $count, $payFinish, $unPay
+            ];
+        }
+
+        //总收入
+        $totalPay = OrderModel::getInstance()->getSumWithMonth('', '', [OrderModel::pay_status_2], [OrderModel::status_9]);
 
         return $content
             ->header('chart')
-            ->description('介绍')
-            ->body(new Box('Bar chart', view('chart.order'), new Table(['111','内容22222'],[[111,222],[111,222],[111,222]])));
-
-//
-//        $rowsji[] = [
-//            'name' => 1111,
-//            'baoguang' => 12,
-//            'dianji' => 11,
-//            'jihuo' => 111,
-//            'zhuce' => 111,
-//            'liucun'=> 11,
-//            'qidong' =>111,
-//            'zliucun' => 11
-//        ];
-//        $rowszuo [] = [
-//            'name' => 1111,
-//            'baoguang' => 12,
-//            'dianji' => 11,
-//            'jihuo' => 111,
-//            'zhuce' => 111,
-//            'liucun'=> 11,
-//            'qidong' =>111,
-//            'zliucun' => 11
-//        ];
-//
-//        return $content
-//            ->title('Dashboard')
-//            ->description('介绍')
-//            ->view('chart.order',['title' => $rowsji[0]['name'].' 数据统计','label'=>"今日/昨日",'','rowsji'=>$rowsji,'rowszuo'=>$rowszuo]);
+            ->description('统计')
+            ->body(new Box('订单总数：' . $orderTotal . '总收入：' . $totalPay, view('chart.order', $chartParams),
+                new Table(
+                    ['月份', '单数', '单月已结算', '单月未结算'],
+                    $tableData
+                )
+            ));
     }
 
 
     public function chart(Content $content)
     {
-        return $content
-            ->header('Chartjs')
-            ->body(new Box('Bar chart', view('admin.chartjs')));
+
     }
 
 

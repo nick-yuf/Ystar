@@ -8,6 +8,7 @@ namespace App\Models;
 
 use App\Models\Common\BaseModel;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 
 class OrderModel extends BaseModel
 {
@@ -21,7 +22,7 @@ class OrderModel extends BaseModel
     /*
      * 数据库字段
      */
-    const F_id = 'id',F_sn = 'sn',F_customer_name = 'customer_name',F_customer_phone = 'customer_phone',F_customer_type = 'customer_type',F_expect_price = 'expect_price',F_timeout_fees = 'timeout_fees',F_append_fees = 'append_fees',F_payment_price = 'payment_price',F_driver_commission = 'driver_commission',F_source = 'source',F_pay_type = 'pay_type',F_pay_sum = 'pay_sum',F_pay_currency = 'pay_currency',F_pay_status = 'pay_status',F_person_sum = 'person_sum',F_children_sum = 'children_sum',F_box_sum = 'box_sum',F_remark = 'remark',F_trip_info = 'trip_info',F_case_info = 'case_info',F_user_id = 'user_id',F_payees_id = 'payees_id',F_car_id = 'car_id',F_status = 'status',F_created_at = 'created_at',F_updated_at = 'updated_at',F_deleted_at = 'deleted_at';
+    const F_id = 'id', F_sn = 'sn', F_customer_name = 'customer_name', F_customer_phone = 'customer_phone', F_customer_type = 'customer_type', F_expect_price = 'expect_price', F_timeout_fees = 'timeout_fees', F_append_fees = 'append_fees', F_payment_price = 'payment_price', F_driver_commission = 'driver_commission', F_source = 'source', F_pay_type = 'pay_type', F_pay_sum = 'pay_sum', F_pay_currency = 'pay_currency', F_pay_status = 'pay_status', F_person_sum = 'person_sum', F_children_sum = 'children_sum', F_box_sum = 'box_sum', F_remark = 'remark', F_trip_info = 'trip_info', F_case_info = 'case_info', F_user_id = 'user_id', F_payees_id = 'payees_id', F_car_id = 'car_id', F_status = 'status', F_created_at = 'created_at', F_updated_at = 'updated_at', F_deleted_at = 'deleted_at';
 
     public function car(): HasOne
     {
@@ -125,5 +126,40 @@ class OrderModel extends BaseModel
         return self::query()
             ->where(self::F_status, $status)
             ->count();
+    }
+
+    public function getTotalByTime($start, $end): int
+    {
+        return self::query()
+            ->whereDate(self::F_created_at, '>=', $start)
+            ->whereDate(self::F_created_at, '<=', $end)
+            ->count();
+    }
+
+    public function getSumWithMonth($start, $end, $payStatus, $status): int
+    {
+        $query = self::query();
+        if ($start) {
+            $query->whereDate(self::F_created_at, '>=', $start);
+        }
+        if ($end) {
+            $query->whereDate(self::F_created_at, '<=', $end);
+        }
+        if ($status) {
+            $query->whereIn(self::F_status, $status);
+        }
+        if ($payStatus) {
+            $query->whereIn(self::F_pay_status, $payStatus);
+        }
+        return $query->sum(self::F_payment_price);
+    }
+
+
+    public function groupByStatus()
+    {
+        return self::query()
+            ->groupBy(self::F_status)
+            ->select(DB::raw('COUNT(*) AS count'), self::F_status)
+            ->get();
     }
 }
