@@ -128,28 +128,35 @@ class OrderModel extends BaseModel
             ->count();
     }
 
-    public function getTotalByTime($start, $end): int
+    public function getTotalByTime($start, $end, $status): int
     {
-        return self::query()
-            ->whereDate(self::F_created_at, '>=', $start)
-            ->whereDate(self::F_created_at, '<=', $end)
-            ->count();
+        $query = self::query();
+        if ($start) {
+            $query = $query->whereDate(self::F_created_at, '>=', $start);
+        }
+        if ($end) {
+            $query = $query->whereDate(self::F_created_at, '<=', $end);
+        }
+        if ($status) {
+            $query = $query->whereIn(self::F_status, $status);
+        }
+        return $query->count();
     }
 
     public function getSumWithMonth($start, $end, $payStatus, $status): int
     {
         $query = self::query();
         if ($start) {
-            $query->whereDate(self::F_created_at, '>=', $start);
+            $query = $query->whereDate(self::F_created_at, '>=', $start);
         }
         if ($end) {
-            $query->whereDate(self::F_created_at, '<=', $end);
+            $query = $query->whereDate(self::F_created_at, '<=', $end);
         }
         if ($status) {
-            $query->whereIn(self::F_status, $status);
+            $query = $query->whereIn(self::F_status, $status);
         }
         if ($payStatus) {
-            $query->whereIn(self::F_pay_status, $payStatus);
+            $query = $query->whereIn(self::F_pay_status, $payStatus);
         }
         return $query->sum(self::F_payment_price);
     }

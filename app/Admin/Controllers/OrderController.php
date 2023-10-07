@@ -54,6 +54,12 @@ class OrderController extends BaseController
                 OrderModel::status_9 => 'success',
                 OrderModel::status_11 => 'danger',
             ]);
+        $grid->column(OrderModel::F_pay_status, __('Pay') . __('Status'))
+            ->editable('select', OrderModel::rtnEnumLang(OrderModel::PayStatusArray))->dot([
+                OrderModel::pay_status_1 => 'warning',
+                OrderModel::pay_status_2 => 'primary',
+                OrderModel::pay_status_3 => 'danger',
+            ]);
 
         $grid->column('222', __('Customer info'))->modal(__('Customer info'), function ($model) {
             return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [

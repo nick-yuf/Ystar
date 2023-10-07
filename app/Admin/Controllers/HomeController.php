@@ -46,17 +46,22 @@ class HomeController extends Controller
             $begin = date('Y-m-d', $times['begin']);
             $end = date('Y-m-d', $times['end']);
 
-            //单月个数
-            $count = OrderModel::getInstance()->getTotalByTime($begin, $end);
+            //单月总单数
+            $monthTotal = OrderModel::getInstance()->getTotalByTime($begin, $end, []);
 
+            //单月完成单数
+            $monthFinisTotal = OrderModel::getInstance()->getTotalByTime($begin, $end, [OrderModel::status_9]);
+            //进行中单数
+            $monthIngTotal = OrderModel::getInstance()->getTotalByTime($begin, $end, [OrderModel::status_1, OrderModel::status_3, OrderModel::status_5, OrderModel::status_7]);
+            //作废单数
+            $monthDelTotal = OrderModel::getInstance()->getTotalByTime($begin, $end, [OrderModel::status_11]);
             //单月已结算
             $payFinish = OrderModel::getInstance()->getSumWithMonth($begin, $end, [OrderModel::pay_status_2], [OrderModel::status_9]);
-
             //单月未结算
             $unPay = OrderModel::getInstance()->getSumWithMonth($begin, $end, [OrderModel::pay_status_1, OrderModel::pay_status_3], []);
 
             $tableData[] = [
-                $v, $count, $payFinish, $unPay
+                $v, $monthTotal, $monthFinisTotal, $monthIngTotal, $monthDelTotal, $payFinish, $unPay
             ];
         }
 
@@ -68,7 +73,7 @@ class HomeController extends Controller
             ->description('统计')
             ->body(new Box('订单总数：' . $orderTotal . '总收入：' . $totalPay, view('chart.order', $chartParams),
                 new Table(
-                    ['月份', '单数', '单月已结算', '单月未结算'],
+                    ['月份', '总单数', '完成单数', '进行中单数', '作废单数', '单月已结算', '单月未结算'],
                     $tableData
                 )
             ));
