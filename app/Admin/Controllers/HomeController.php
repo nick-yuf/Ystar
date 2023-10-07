@@ -56,7 +56,7 @@ class HomeController extends Controller
             //作废单数
             $monthDelTotal = OrderModel::getInstance()->getTotalByTime($begin, $end, [OrderModel::status_11]);
             //单月已结算
-            $payFinish = OrderModel::getInstance()->getSumWithMonth($begin, $end, [OrderModel::pay_status_2], [OrderModel::status_9]);
+            $payFinish = OrderModel::getInstance()->getSumWithMonth($begin, $end, [OrderModel::pay_status_2], []);
             //单月未结算
             $unPay = OrderModel::getInstance()->getSumWithMonth($begin, $end, [OrderModel::pay_status_1, OrderModel::pay_status_3], []);
 
@@ -71,7 +71,7 @@ class HomeController extends Controller
         return $content
             ->header('chart')
             ->description('统计')
-            ->body(new Box('订单总数：' . $orderTotal . '总收入：' . $totalPay, view('chart.order', $chartParams),
+            ->body(new Box('订单总数：' . $orderTotal . ';总收入：' . $totalPay, view('chart.order', $chartParams),
                 new Table(
                     ['月份', '总单数', '完成单数', '进行中单数', '作废单数', '单月已结算', '单月未结算'],
                     $tableData
