@@ -104,5 +104,14 @@
     "Basic": "基础",
     "Pay": "支付",
     "Recommend": "推荐",
-    "User": "用户"
+    "User": "用户",
+    "Smart": "智能",
+    "Month": "月份",
+    "Total orders": "总订单数",
+    "Finished orders": "已完成订单",
+    "Unfinished orders": "未完成订单",
+    "Canceled orders": "已取消订单",
+    "Statistics": "统计",
+    "Profit": "利润",
+    "Revenue": "营收"
 }

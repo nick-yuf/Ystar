@@ -74,10 +74,10 @@ class HomeController extends Controller
 
         return $content
             ->header('chart')
-            ->description('统计')
-            ->body(new Box('[订单总数：' . $orderTotal . ']、[总收入：' . $totalPay . ']、[佣金：' . $totalDriver . ']、[营收：' . $paySum . ']', view('chart.order', $chartParams),
+            ->description(__('Statistics'))
+            ->body(new Box('[' . __('Total orders') . '：' . $orderTotal . ']、['.__('Revenue').'：' . $totalPay . ']、[' . __('Driver commission') . '：' . $totalDriver . ']、[' . __('Profit') . '：' . $paySum . ']', view('chart.order', $chartParams),
                 new Table(
-                    ['月份', '总单数', '完成单数', '进行中单数', '作废单数', '单月已结算', '单月未结算'],
+                    [__('Month'), __('Total orders'), __('Finished orders'), __('Unfinished orders'), __('Canceled orders'), __('Settled'), __('Uncleared')],
                     $tableData
                 )
             ));

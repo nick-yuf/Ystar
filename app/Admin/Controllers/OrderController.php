@@ -94,7 +94,7 @@ class OrderController extends BaseController
 
         $grid->tools(function (Grid\Tools $tools) {
             $url = $this->getRouteByName('order#tab-form', '');
-            $tools->append('<a class="btn btn-sm btn-success" href="' . $url . '" ><i class="fa fa-plus"></i><span class="hidden-xs">  智能' . trans('admin.new') . '</span></a>');
+            $tools->append('<a class="btn btn-sm btn-success" href="' . $url . '" ><i class="fa fa-plus"></i><span class="hidden-xs">  '.__('Smart') . trans('admin.new') . '</span></a>');
         });
 
         //行操作
