@@ -83,7 +83,7 @@ class OrderController extends BaseController
 
         $grid->column('333333', __('Share'))->display(function () {
             $url = env('APP_URL');
-            return "<a href='{$url}/admin/order/info?id={$this->id}' target='_blank'><span class='fa fa-link'></span></a>";
+            return "<a href='{$url}admin/order/info?id={$this->id}' target='_blank'><span class='fa fa-link'></span></a>";
         });
 
         $grid->column('user.name', __('User'));
