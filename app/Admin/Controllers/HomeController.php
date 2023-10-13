@@ -58,7 +58,7 @@ class HomeController extends Controller
             //单月已结算
             $payFinish = OrderModel::getInstance()->getSumWithMonth($begin, $end, [OrderModel::pay_status_2], []);
             //单月未结算
-            $unPay = OrderModel::getInstance()->getSumWithMonth($begin, $end, [OrderModel::pay_status_1, OrderModel::pay_status_3], []);
+            $unPay = OrderModel::getInstance()->getSumWithMonth($begin, $end, [OrderModel::pay_status_1, OrderModel::pay_status_3], [], OrderModel::F_expect_price);
 
             $tableData[] = [
                 $v, $monthTotal, $monthFinisTotal, $monthIngTotal, $monthDelTotal, $payFinish, $unPay
@@ -75,7 +75,7 @@ class HomeController extends Controller
         return $content
             ->header('chart')
             ->description(__('Statistics'))
-            ->body(new Box('[' . __('Total orders') . '：' . $orderTotal . ']、['.__('Revenue').'：' . $totalPay . ']、[' . __('Driver commission') . '：' . $totalDriver . ']、[' . __('Profit') . '：' . $paySum . ']', view('chart.order', $chartParams),
+            ->body(new Box('[' . __('Total orders') . '：' . $orderTotal . ']、[' . __('Revenue') . '：' . $totalPay . ']、[' . __('Driver commission') . '：' . $totalDriver . ']、[' . __('Profit') . '：' . $paySum . ']', view('chart.order', $chartParams),
                 new Table(
                     [__('Month'), __('Total orders'), __('Finished orders'), __('Unfinished orders'), __('Canceled orders'), __('Settled'), __('Uncleared')],
                     $tableData
