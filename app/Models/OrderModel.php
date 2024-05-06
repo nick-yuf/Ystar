@@ -57,7 +57,7 @@ class OrderModel extends BaseModel
     ];
 
     //客户来源：1.线下，2.小红书, 3.其他
-    const source_1 = 1, source_2 = 2, source_3 = 3, source_4 = 4, source_5 = 5, source_6 = 6, source_7 = 7;
+    const source_1 = 1, source_2 = 2, source_3 = 3, source_4 = 4, source_5 = 5, source_6 = 6, source_7 = 7, source_8 = 8, source_9 = 9;
     const SourceArray = [
         self::source_1 => 'Face2',
         self::source_2 => 'Axon',
@@ -66,6 +66,8 @@ class OrderModel extends BaseModel
         self::source_5 => 'Visitor',
         self::source_6 => '闲鱼',
         self::source_7 => '抖音',
+        self::source_8 => 'Face1',
+        self::source_9 => '天汇',
     ];
 
     //支付货币种类：1.马币，2.人民币, 3.美元
