@@ -86,7 +86,10 @@ class OrderController extends BaseController
             return "<a href='{$url}admin/order/info?id={$this->id}' target='_blank'><span class='fa fa-link'></span></a>";
         });
 
-        $grid->column('user.name', __('User'));
+//        $grid->column('user.name', __('User'));
+
+        $grid->column(OrderModel::F_source,  __('Source'))
+            ->editable('select', OrderModel::rtnEnumLang(OrderModel::SourceArray));
 
         $grid->column(OrderModel::F_created_at, __('Created at'))->display(function ($val) {
             return date('Y-m-d', strtotime($val));
