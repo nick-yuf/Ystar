@@ -64,22 +64,22 @@ class OrderController extends BaseController
         $grid->column('222', __('Customer info'))->modal(__('Customer info'), function ($model) {
             return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
                 [__('Customer name'), $model[OrderModel::F_customer_name]],
-                [__('Customer phone'), $model[OrderModel::F_customer_phone]],
+                [__('Customer phone'), $model[OrderModel::F_customer_phone] ?: '-'],
                 [__('Person') . __('Sum'), $model[OrderModel::F_person_sum]],
                 [__('Children') . __('Sum'), $model[OrderModel::F_children_sum]],
                 [__('Luggage') . __('Sum'), $model[OrderModel::F_box_sum]],
-                [__('Expect price'), $model[OrderModel::F_expect_price]],
+                [__('Expect price'), $model[OrderModel::F_expect_price] . ' RM'],
                 [__('Car'), $model['car'] ? $model['car'][CarModel::F_car_type] : "-"],
                 [__('Payees'), $model['payees'] ? $model['payees'][PayeesModel::F_name] : "-"],
             ], ['table', 'table-bordered', 'table-condensed', 'table-striped']);
-        });
+        })->width(100);
         $grid->column('111', __('Trip info'))->expand(function ($model) {
-            return new Table(
-                [__('Use begin time'), __('Flight number'), __('Reach time'), __('Begin address'), __('Finish address')],
-                $model->trip_info,
-                ['table', 'table-bordered', 'table-condensed', 'table-striped']
-            );
-        });
+            $tableTitle = [__('Use begin time'), __('Flight number'), __('Reach time'), __('Begin address'), __('Finish address')];
+            if ($model->customer_type == OrderModel::customer_type_3) {
+                $tableTitle = [__('Use begin time'), __('Begin address'), __('Finish address')];
+            }
+            return new Table($tableTitle, $model->trip_info, ['table', 'table-bordered', 'table-condensed', 'table-striped']);
+        })->width(100);
 
         $grid->column('333333', __('Share'))->display(function () {
             $url = env('APP_URL');
@@ -87,9 +87,10 @@ class OrderController extends BaseController
         });
 
 //        $grid->column('user.name', __('User'));
-
-        $grid->column(OrderModel::F_source,  __('Source'))
-            ->editable('select', OrderModel::rtnEnumLang(OrderModel::SourceArray));
+        $grid->column(OrderModel::F_customer_type, __('Customer type'))
+            ->editable('select', OrderModel::rtnEnumLang(OrderModel::CustomerTypeArray))->width(100);
+        $grid->column(OrderModel::F_source, __('Source'))
+            ->editable('select', OrderModel::rtnEnumLang(OrderModel::SourceArray))->width(100);
 
         $grid->column(OrderModel::F_created_at, __('Created at'))->display(function ($val) {
             return date('Y-m-d', strtotime($val));
@@ -97,7 +98,7 @@ class OrderController extends BaseController
 
         $grid->tools(function (Grid\Tools $tools) {
             $url = $this->getRouteByName('order#tab-form', '');
-            $tools->append('<a class="btn btn-sm btn-success" href="' . $url . '" ><i class="fa fa-plus"></i><span class="hidden-xs">  '.__('Smart') . trans('admin.new') . '</span></a>');
+            $tools->append('<a class="btn btn-sm btn-success" href="' . $url . '" ><i class="fa fa-plus"></i><span class="hidden-xs">  ' . __('Smart') . trans('admin.new') . '</span></a>');
         });
 
         //行操作
@@ -178,11 +179,11 @@ class OrderController extends BaseController
         $form->select(OrderModel::F_pay_currency, __('Pay currency'))->options($this->setLang(OrderModel::PayCurrencyArray))->default(OrderModel::pay_currency_1);
         $form->select(OrderModel::F_pay_status, __('Pay status'))->options($this->setLang(OrderModel::PayStatusArray))->default(OrderModel::pay_status_1);
         $form->radio(OrderModel::F_status, __('Order') . __('Status'))->options($this->setLang(OrderModel::StatusArray))->default(OrderModel::status_1);
-        $form->currency(OrderModel::F_expect_price, __('Expect price'))->width('100px');
-        $form->currency(OrderModel::F_timeout_fees, __('Timeout fees'));
-        $form->currency(OrderModel::F_append_fees, __('Append fees'));
-        $form->currency(OrderModel::F_payment_price, __('Payment price'));
-        $form->currency(OrderModel::F_driver_commission, __('Driver commission'));
+        $form->currency(OrderModel::F_expect_price, __('Expect price'))->symbol('RM');
+        $form->currency(OrderModel::F_timeout_fees, __('Timeout fees'))->symbol('RM');
+        $form->currency(OrderModel::F_append_fees, __('Append fees'))->symbol('RM');
+        $form->currency(OrderModel::F_payment_price, __('Payment price'))->symbol('RM');
+        $form->currency(OrderModel::F_driver_commission, __('Driver commission'))->symbol('RM');
         $form->select(OrderModel::F_payees_id, __('Payees'))->options('/api/payees/select-list')->required();
         $form->select(OrderModel::F_car_id, __('Car'))->options('/api/car/select-list')->required();
 
@@ -190,10 +191,10 @@ class OrderController extends BaseController
         $form->table(OrderModel::F_trip_info, __('Trip info'), function ($table) {
             $table->datetime(OrderTripModel::F_use_begin_time, __('Use begin time'));
 //            $table->datetime(OrderTripModel::F_use_finish_time, __('Use finish time'));
-            $table->text(OrderTripModel::F_flight_number, __('Flight number'));
-            $table->datetime(OrderTripModel::F_reach_time, __('Reach time'));
-            $table->text(OrderTripModel::F_begin_address, __('Begin address'));
-            $table->text(OrderTripModel::F_finish_address, __('Finish address'));
+            $table->text(OrderTripModel::F_flight_number, __('Flight number'))->default('');
+            $table->datetime(OrderTripModel::F_reach_time, __('Reach time'))->default('');
+            $table->text(OrderTripModel::F_begin_address, __('Begin address'))->default('');
+            $table->text(OrderTripModel::F_finish_address, __('Finish address'))->default('');
         })->setGroupClass(['table1', 'table-bordered', 'table-condensed', 'table-striped']);
 
         $form->hidden(OrderModel::F_sn)->default('YS' . date('YmdHis'));

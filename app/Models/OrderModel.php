@@ -70,12 +70,13 @@ class OrderModel extends BaseModel
         self::source_9 => '天汇',
     ];
 
-    //支付货币种类：1.马币，2.人民币, 3.美元
-    const pay_currency_1 = 1, pay_currency_2 = 2, pay_currency_3 = 3;
+    //支付货币种类：1.马币，2.人民币, 3.美元, 4.新币
+    const pay_currency_1 = 1, pay_currency_2 = 2, pay_currency_3 = 3, pay_currency_4 = 4;
     const PayCurrencyArray = [
-        self::pay_currency_1 => 'Ringgit',
+        self::pay_currency_1 => 'RM',
         self::pay_currency_2 => 'RMB',
-        self::pay_currency_3 => 'Dollar',
+        self::pay_currency_3 => 'USD',
+        self::pay_currency_4 => 'SGD',
     ];
 
     //付款状态：1待结算，2已结算，3未结算
