@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Car\CarCase;
 use App\Models\CarCaseModel;
+use App\Models\CarChannelModel;
 use App\Models\CarModel;
 use App\Models\CarPriceModel;
 use Encore\Admin\Form;
@@ -32,7 +33,7 @@ class CarChannelController extends BaseController
      */
     protected function grid(): Grid
     {
-        $grid = new Grid(new CarModel());
+        $grid = new Grid(new CarChannelModel());
         $grid->quickSearch(CarModel::F_car_type)->placeholder(__('Car type'));
         $grid->column(CarModel::F_car_type, __('Car type'))->modal(__('Car type'), function ($model) {
             return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
@@ -79,7 +80,7 @@ class CarChannelController extends BaseController
      */
     protected function detail($id): Show
     {
-        $show = new Show(CarModel::findOrFail($id));
+        $show = new Show(CarChannelModel::findOrFail($id));
 
         $show->field(CarModel::F_car_type, __('Car type'));
         $show->field(CarModel::F_desc, __('Description'));
@@ -98,7 +99,7 @@ class CarChannelController extends BaseController
      */
     protected function form(): Form
     {
-        $form = new Form(new CarModel());
+        $form = new Form(new CarChannelModel());
 
         $form->text(CarModel::F_car_type, __('Car type'))->required();
         $form->textarea(CarModel::F_desc, __('Description'))->rows(3);
@@ -108,8 +109,8 @@ class CarChannelController extends BaseController
             $form->table(CarModel::F_price_info, __('List'), function ($table) {
                 $table->select(CarPriceModel::F_type, __('Type'))->options($this->setLang(CarPriceModel::TypeArray))->default(CarPriceModel::type_1);
                 $table->text(CarPriceModel::F_service_area, __('Service area'));
-                $table->text(CarPriceModel::F_custom_price, __('Custom price'))->attribute(['style' => "width: 90px;"]);
-                $table->text(CarPriceModel::F_commission_price, __('Commission price'))->attribute(['style' => "width: 90px;"]);
+                $table->text(CarPriceModel::F_custom_price, __('Price'))->attribute(['style' => "width: 90px;"]);
+//                $table->text(CarPriceModel::F_commission_price, __('Commission price'))->attribute(['style' => "width: 90px;"]);
                 $table->currency(CarPriceModel::F_timeout_fees, __('Timeout fees'))->attribute(['style' => "width: 65px;"]);
                 $table->currency(CarPriceModel::F_extra_fees, __('Extra fees'))->attribute(['style' => "width: 65px;"]);
             })->setGroupClass(['table1', 'table-bordered', 'table-condensed', 'table-striped']);
