@@ -25,6 +25,12 @@ Route::group([
         $route->resource('case-list', 'CarCaseController')->names('car#case-list');
     });
 
+    //car-channel
+    $router->group(['prefix' => 'car-channel'], function (Router $route) {
+        $route->resource('list', 'CarChannelController')->names('car-channel#list');
+        $route->resource('case-list', 'CarCaseController')->names('car#case-list');
+    });
+
     //payees
     $router->group(['prefix' => 'payees'], function (Router $route) {
         $route->resource('list', 'PayeesController');
