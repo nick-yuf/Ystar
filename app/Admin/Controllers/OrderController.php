@@ -118,8 +118,8 @@ class OrderController extends BaseController
                 ];
             })->toArray();
             $selector->select(OrderModel::F_status, __('Status'), OrderModel::rtnEnumLang(OrderModel::StatusArray));
-            $selector->select(OrderModel::F_customer_type, __('Customer type'), OrderModel::rtnEnumLang(OrderModel::CustomerTypeArray));
-            $selector->select(OrderModel::F_car_id, __('Car'), OrderModel::rtnEnumLang($cars));
+            //$selector->select(OrderModel::F_customer_type, __('Customer type'), OrderModel::rtnEnumLang(OrderModel::CustomerTypeArray));
+           // $selector->select(OrderModel::F_car_id, __('Car'), OrderModel::rtnEnumLang($cars));
         });
 
         //底部统计
