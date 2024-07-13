@@ -20,6 +20,6 @@ class AuthController extends BaseAuthController
             return admin_base_path('/car-channel/list');
         }
 
-        return admin_base_path('/');
+        return admin_base_path('/order/list');
     }
 }
