@@ -17,16 +17,7 @@
                     pointBorderColor: '#007bff',
                     pointBackgroundColor: '#007bff',
                     fill: false
-                },
-                    {
-                        type: 'line',
-                        data: [@foreach($orderSumArray as $k => $v)'{{$v}}',@endforeach],
-                        backgroundColor: 'tansparent',
-                        borderColor: '#ced4da',
-                        pointBorderColor: '#ced4da',
-                        pointBackgroundColor: '#ced4da',
-                        fill: false
-                    }]
+                }]
             },
             options: {
                 maintainAspectRatio: false,
