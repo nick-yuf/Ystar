@@ -64,13 +64,13 @@ class OrderController extends BaseController
         $grid->column('222', __('Customer info'))->modal(__('Customer info'), function ($model) {
             return new Table(['#' . __('Param') . '#', '#' . __('Value') . '#'], [
                 [__('Customer name'), $model[OrderModel::F_customer_name]],
-                [__('Customer phone'), $model[OrderModel::F_customer_phone] ?: '-'],
                 [__('Person') . __('Sum'), $model[OrderModel::F_person_sum]],
                 [__('Children') . __('Sum'), $model[OrderModel::F_children_sum]],
                 [__('Luggage') . __('Sum'), $model[OrderModel::F_box_sum]],
                 [__('Expect price'), $model[OrderModel::F_expect_price] . ' RM'],
                 [__('Car'), $model['car'] ? $model['car'][CarModel::F_car_type] : "-"],
                 [__('Payees'), $model['payees'] ? $model['payees'][PayeesModel::F_name] : "-"],
+                [__('Notes'), $model[OrderModel::F_remark]],
             ], ['table', 'table-bordered', 'table-condensed', 'table-striped']);
         })->width(100);
         $grid->column('111', __('Trip info'))->expand(function ($model) {
