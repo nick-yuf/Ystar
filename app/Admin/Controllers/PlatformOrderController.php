@@ -15,7 +15,7 @@ class PlatformOrderController extends BaseController
      *
      * @var string
      */
-    protected $title = 'platform order';
+    protected $title = '平台订单';
 
     public function __construct()
     {
