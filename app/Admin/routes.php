@@ -19,6 +19,11 @@ Route::group([
         $route->get('tab-form', 'OrderController@tabForm')->name('order#tab-form');
     });
 
+    //platform order
+    $router->group(['prefix' => 'platform-order'], function (Router $route) {
+        $route->resource('list', 'PlatformOrderController')->names('platform-order#list');
+    });
+
     //car
     $router->group(['prefix' => 'car'], function (Router $route) {
         $route->resource('list', 'CarController')->names('car#list');

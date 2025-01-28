@@ -4,6 +4,8 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Order\Share;
 use App\Admin\Extensions\OrderExporter;
+use App\Models\OrderPlatformModel;
+use App\Models\PlatformOrderModel;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Widgets\MultipleSteps;
@@ -166,10 +168,34 @@ class OrderController extends BaseController
     protected function form(): Form
     {
         $form = new Form(new OrderModel());
-
         $form->text(OrderModel::F_customer_name, __('Customer name'))->default('');
         $form->text(OrderModel::F_customer_phone, __('Customer phone'))->default('');
         $form->select(OrderModel::F_source, __('Source'))->options($this->setLang(OrderModel::SourceArray))->default(OrderModel::source_1);
+        //新增平台 id
+        $form->select(OrderModel::F_platform_order_id, __('Platform').__('Order'))
+            ->options((function ($id) {
+                $one = PlatformOrderModel::getInstance()->getOneById($id);
+                if($one) {
+                    $platformName = PlatformOrderModel::rtnEnumVal(PlatformOrderModel::PlatformTypeArray,$one[PlatformOrderModel::F_platform_type]);
+                    $one = [
+                        $one[PlatformOrderModel::F_id] =>'「'.$platformName.'」'. $one[PlatformOrderModel::F_customer_order_id]
+                    ];
+                } else {
+                    $one = [];
+                }
+
+                $data = PlatformOrderModel::getInstance()->getData(5,$id);
+                $data->each(function ($item)use(&$one) {
+                    $platformName = PlatformOrderModel::rtnEnumVal(PlatformOrderModel::PlatformTypeArray,$item[PlatformOrderModel::F_platform_type]);
+                    $one[ $item[PlatformOrderModel::F_id]] ='「' . $platformName . '」' . $item[PlatformOrderModel::F_customer_order_id];
+
+                    return $one;
+                });
+
+                return $one;
+            }));
+
+        //    ->options('/api/order/platform-order?id=');
         $form->number(OrderModel::F_person_sum, __('Person') . __('Sum'))->max(100)->default(0);
         $form->number(OrderModel::F_children_sum, __('Children') . __('Sum'))->max(100)->default(0);
         $form->number(OrderModel::F_box_sum, __('Luggage') . __('Sum'))->max(100)->default(0);

@@ -3,6 +3,7 @@
     "Created at": "创建时间",
     "Updated at": "更新时间",
     "Deleted at": "删除时间",
+    "Customer": "客户",
     "Customer name": "客户姓名",
     "Customer phone": "客户联系方式",
     "Group name": "组名",
@@ -116,5 +117,12 @@
     "Canceled orders": "已取消订单",
     "Statistics": "统计",
     "Profit": "利润",
-    "Revenue": "营收"
+    "Revenue": "营收",
+    "Platform": "平台",
+    "Amount": "金额",
+    "Currency": "币种",
+    "Travel": "行程",
+    "Fee": "服务费",
+    "Payment": "付款",
+    "Related": "关联"
 }

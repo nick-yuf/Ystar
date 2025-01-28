@@ -33,4 +33,16 @@ class OrderController extends Controller
         ));
     }
 
+    /**
+     * @param OrderRequest $request
+     * @return Response
+     */
+    public function platformOrder(OrderRequest $request): Response
+    {
+        $request->validate(__FUNCTION__);
+        return $this->response->array($this->logic->platformOrder(
+            $request->get('limit',10),
+            $request->get('id',0),
+        ));
+    }
 }

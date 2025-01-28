@@ -7,6 +7,7 @@ use App\Logic\BaseLogic;
 use App\Models\CarModel;
 use App\Models\OrderModel;
 use App\Models\PayeesModel;
+use App\Models\PlatformOrderModel;
 
 class OrderLogic extends BaseLogic
 {
@@ -31,5 +32,41 @@ class OrderLogic extends BaseLogic
         return ['success'];
     }
 
+
+    /**
+     * @desc changeStatus
+     * @param $limit
+     * @param $id
+     * @return array
+     */
+    public function platformOrder($limit,$id): array
+    {
+        $data = PlatformOrderModel::getInstance()->getData($limit,$id);
+        if (!$data) {
+            return [];
+        }
+        $one = PlatformOrderModel::getInstance()->getOneById($id);
+        if($one) {
+            $platformName = PlatformOrderModel::rtnEnumVal(PlatformOrderModel::PlatformTypeArray,$one[PlatformOrderModel::F_platform_type]);
+            $one = [
+                [
+                'id' => $one[PlatformOrderModel::F_id],
+                'text' => '「'.$platformName.'」'. $one[PlatformOrderModel::F_customer_order_id],
+                ]
+            ];
+        } else {
+            $one = [];
+        }
+
+        $array = $data->map(function ($item) {
+            $platformName = PlatformOrderModel::rtnEnumVal(PlatformOrderModel::PlatformTypeArray,$item[PlatformOrderModel::F_platform_type]);
+            return [
+                'id' => $item[PlatformOrderModel::F_id],
+                'text' => '「'.$platformName.'」'. $item[PlatformOrderModel::F_customer_order_id],
+            ];
+        })->toArray();
+
+        return array_merge($array,$one);
+    }
 
 }

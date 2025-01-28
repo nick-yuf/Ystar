@@ -30,6 +30,7 @@ class OrderRequest extends BaseValidate
     }
 
     public $scenes = [
-        'changeStatus' => ['id', 'status']
+        'changeStatus' => ['id', 'status'],
+        'platformOrder' => []
     ];
 }

@@ -36,7 +36,8 @@ $api->version(
         });
 
         $api->group(['prefix' => 'order'], function ($api) {
-                $api->any('change-status', 'OrderController@changeStatus')->name('order#change-status');
+            $api->any('change-status', 'OrderController@changeStatus')->name('order#change-status');
+            $api->any('platform-order', 'OrderController@platformOrder')->name('order#platform-order');
         });
 
         $api->group(['prefix' => 'car'], function ($api) {
