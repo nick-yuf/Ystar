@@ -40,11 +40,12 @@ class PlatformOrderController extends BaseController
             ->editable('select', PlatformOrderModel::rtnEnumLang(PlatformOrderModel::PlatformTypeArray));
 
         $grid->column('111', __('Related').__('Order'))->expand(function ($model) {
-            $tableTitle = [__('ID'), __('Order').__('Status'), __('Payment').__('Status'), __('Type')];
+            $tableTitle = [__('ID'),__('Customer name'), __('Order').__('Status'), __('Payment').__('Status'), __('Type')];
             $res = OrderModel::getInstance()->getDataByPlatformOrderId($model->id,10);
             $data = $res->map(function ($item){
                return [
                    $item[OrderModel::F_id],
+                   $item[OrderModel::F_customer_name],
                    OrderModel::rtnEnumVal(OrderModel::StatusArray,$item[OrderModel::F_status]),
                    OrderModel::rtnEnumVal(OrderModel::PayStatusArray,$item[OrderModel::F_pay_status]),
                    OrderModel::rtnEnumVal(OrderModel::CustomerTypeArray,$item[OrderModel::F_customer_type]),
