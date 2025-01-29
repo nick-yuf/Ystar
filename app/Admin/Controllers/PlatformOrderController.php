@@ -34,7 +34,10 @@ class PlatformOrderController extends BaseController
 
         $grid->column(PlatformOrderModel::F_id,__('ID'));
         $grid->column(PlatformOrderModel::F_customer_order_id,__('Customer').__('Tag'));
-        $grid->column(PlatformOrderModel::F_payment_amount,__('Payment'). __('Amount'));
+        $grid->column(PlatformOrderModel::F_payment_amount,__('Payment'). __('Amount'))->display(function () {
+            return "<font color='red'>".$this->payment_amount . '</font> ' . PlatformOrderModel::rtnEnumVal(PlatformOrderModel::CurrencyArray,$this->currency);
+        });
+
         $grid->column(PlatformOrderModel::F_platform_fee,__('Platform'). __('Fee'));
         $grid->column(PlatformOrderModel::F_platform_type,__('Platform'). __('Type'))
             ->editable('select', PlatformOrderModel::rtnEnumLang(PlatformOrderModel::PlatformTypeArray));
