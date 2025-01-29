@@ -244,6 +244,9 @@ class OrderController extends BaseController
             if (empty($form->model()->getAttribute(OrderModel::F_case_info))) {
                 $form->model()->setAttribute(OrderModel::F_case_info, []);
             }
+            if (empty($form->model()->getAttribute(OrderModel::F_platform_order_id))) {
+                $form->model()->setAttribute(OrderModel::F_platform_order_id, 0);
+            }
             return $form;
         });
 
