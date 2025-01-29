@@ -191,9 +191,9 @@ class OrderController extends BaseController
 
                     return $one;
                 });
-
+                $one[0]='非平台订单';
                 return $one;
-            }));
+            }))->default(0);
 
         //    ->options('/api/order/platform-order?id=');
         $form->number(OrderModel::F_person_sum, __('Person') . __('Sum'))->max(100)->default(0);
@@ -244,9 +244,8 @@ class OrderController extends BaseController
             if (empty($form->model()->getAttribute(OrderModel::F_case_info))) {
                 $form->model()->setAttribute(OrderModel::F_case_info, []);
             }
-            if (empty($form->model()->getAttribute(OrderModel::F_platform_order_id))) {
-                $form->model()->setAttribute(OrderModel::F_platform_order_id, 0);
-            }
+
+//            $form->model()->setAttribute(OrderModel::F_platform_order_id, 0);
             return $form;
         });
 
