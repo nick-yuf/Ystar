@@ -56,7 +56,7 @@ class PlatformOrderController extends BaseController
 
         $grid->column(PlatformOrderModel::F_platform_status, __('Platform') . __('Status'))
             ->editable('select', PlatformOrderModel::rtnEnumLang(PlatformOrderModel::PlatformStatusArray))->dot([
-                PlatformOrderModel::platform_status_1 => 'warning',
+                PlatformOrderModel::platform_status_1 => 'default',
                 PlatformOrderModel::platform_status_2 => 'warning',
                 PlatformOrderModel::platform_status_3 => 'warning',
                 PlatformOrderModel::platform_status_4 => 'success',
@@ -64,7 +64,7 @@ class PlatformOrderController extends BaseController
             ]);
         $grid->column(PlatformOrderModel::F_travel_status, __('Travel') . __('Status'))
             ->editable('select', PlatformOrderModel::rtnEnumLang(PlatformOrderModel::TravelStatusArray))->dot([
-                PlatformOrderModel::travel_status_1 => 'warning',
+                PlatformOrderModel::travel_status_1 => 'default',
                 PlatformOrderModel::travel_status_2 => 'warning',
                 PlatformOrderModel::travel_status_3 => 'success',
                 PlatformOrderModel::travel_status_4 => 'danger',

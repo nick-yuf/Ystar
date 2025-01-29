@@ -49,7 +49,7 @@ class OrderController extends BaseController
         $grid->column(OrderModel::F_id, __('ID'));
         $grid->column(OrderModel::F_status, __('Order') . __('Status'))
             ->editable('select', OrderModel::rtnEnumLang(OrderModel::StatusArray))->dot([
-                OrderModel::status_1 => 'warning',
+                OrderModel::status_1 => 'default',
                 OrderModel::status_3 => 'warning',
                 OrderModel::status_5 => 'warning',
                 OrderModel::status_7 => 'warning',
@@ -58,7 +58,7 @@ class OrderController extends BaseController
             ]);
         $grid->column(OrderModel::F_pay_status, __('Pay') . __('Status'))
             ->editable('select', OrderModel::rtnEnumLang(OrderModel::PayStatusArray))->dot([
-                OrderModel::pay_status_1 => 'warning',
+                OrderModel::pay_status_1 => 'default',
                 OrderModel::pay_status_2 => 'success',
                 OrderModel::pay_status_3 => 'danger',
             ]);
