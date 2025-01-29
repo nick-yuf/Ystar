@@ -34,11 +34,11 @@ class PlatformOrderModel extends BaseModel
         self::currency_1 => '人民币',
     ];
 
-    //平台订单状态：1未付款，2已付款，3已发货，4已成交，5已退款
+    //平台订单状态：1已付款，2待发货，3已发货，4已成交，5已退款
     const platform_status_1 = 1, platform_status_2 = 2, platform_status_3 = 3, platform_status_4 = 4, platform_status_5 = 5;
     const PlatformStatusArray = [
-        self::platform_status_1 => '未付款',
-        self::platform_status_2 => '已付款',
+        self::platform_status_1 => '已付款',
+        self::platform_status_2 => '待发货',
         self::platform_status_3 => '已发货',
         self::platform_status_4 => '已成交',
         self::platform_status_5 => '已退款',

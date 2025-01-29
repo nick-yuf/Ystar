@@ -60,8 +60,8 @@ class PlatformOrderController extends BaseController
 
         $grid->column(PlatformOrderModel::F_platform_status, __('Platform') . __('Status'))
             ->editable('select', PlatformOrderModel::rtnEnumLang(PlatformOrderModel::PlatformStatusArray))->dot([
-                PlatformOrderModel::platform_status_1 => 'default',
-                PlatformOrderModel::platform_status_2 => 'warning',
+                PlatformOrderModel::platform_status_1 => 'warning',
+                PlatformOrderModel::platform_status_2 => 'default',
                 PlatformOrderModel::platform_status_3 => 'warning',
                 PlatformOrderModel::platform_status_4 => 'success',
                 PlatformOrderModel::platform_status_5 => 'danger',
