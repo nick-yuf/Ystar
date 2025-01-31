@@ -38,7 +38,7 @@ class PlatformOrderController extends BaseController
             return "<font color='red'>".$this->payment_amount . '</font> ' . PlatformOrderModel::rtnEnumVal(PlatformOrderModel::CurrencyArray,$this->currency);
         });
 
-        $grid->column(PlatformOrderModel::F_platform_fee,__('Platform'). __('Fee'));
+        $grid->column(PlatformOrderModel::F_platform_fee,__('Platform'). __('Fee'))->editable();
         $grid->column(PlatformOrderModel::F_platform_type,__('Platform'). __('Type'))
             ->editable('select', PlatformOrderModel::rtnEnumLang(PlatformOrderModel::PlatformTypeArray));
 
