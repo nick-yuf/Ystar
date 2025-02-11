@@ -47,7 +47,10 @@ class PlatformOrderController extends BaseController
             </a></li>
             <li>
         </ul>
-    </div>','PS：闲鱼基础软件服务费：付款金额*0.6%');
+    </div>','<p style="margin-left: 15px">注明：<br>
+    1. 已入账：金额结算到公共银行账户上<br>
+    2. 未入账：金额结算在平台账户对应的支付账号内<br>
+    3. 手续费：闲鱼平台基础软件服务费计算方式（付款金额*0.6%） </p>');
 
         return $content
             ->title(__('Platform').__('Order'))
