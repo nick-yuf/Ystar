@@ -6,6 +6,7 @@
 namespace App\Models;
 
 use App\Models\Common\BaseModel;
+use Illuminate\Support\Facades\DB;
 
 class PlatformOrderModel extends BaseModel
 {
@@ -19,7 +20,7 @@ class PlatformOrderModel extends BaseModel
     /*
      * 数据库字段
      */
-    const F_id = 'id',F_platform_type = 'platform_type',F_platform_fee = 'platform_fee',F_payment_amount = 'payment_amount',F_currency = 'currency',F_platform_status = 'platform_status',F_travel_status = 'travel_status',F_customer_order_id = 'customer_order_id',F_created_at = 'created_at',F_updated_at = 'updated_at',F_deleted_at = 'deleted_at';
+    const F_id = 'id',F_platform_type = 'platform_type',F_platform_fee = 'platform_fee',F_platform_fee_status = 'platform_fee_status',F_payment_amount = 'payment_amount',F_payment_amount_status = 'payment_amount_status',F_currency = 'currency',F_platform_status = 'platform_status',F_travel_status = 'travel_status',F_customer_order_id = 'customer_order_id',F_created_at = 'created_at',F_updated_at = 'updated_at',F_deleted_at = 'deleted_at';
 
 
     //平台类型：1 闲鱼
@@ -83,5 +84,23 @@ class PlatformOrderModel extends BaseModel
         return self::query()
             ->where(self::F_travel_status, $status)
             ->count();
+    }
+
+    public function getSumByPaymentAmount($status = null): int
+    {
+        $query = self::query();
+        if($status !== null) {
+            $query->where(self::F_payment_amount_status, $status);
+        }
+        return $query->sum(self::F_payment_amount);
+    }
+
+    public function getSumByFee($status = null)
+    {
+        $query = self::query();
+        if($status !== null) {
+            $query->where(self::F_platform_fee_status, $status);
+        }
+        return $query->select(DB::raw('IFNULL(SUM(platform_fee),0) AS sum'))->first();
     }
 }

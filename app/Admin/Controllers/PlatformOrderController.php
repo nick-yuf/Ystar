@@ -6,19 +6,51 @@ use App\Models\OrderModel;
 use App\Models\PlatformOrderModel;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Widgets\Table;
-
+use Encore\Admin\Widgets;
 class PlatformOrderController extends BaseController
 {
     /**
-     * Title for current resource.
+     * Index interface.
      *
-     * @var string
+     * @param Content $content
+     * @return Content
      */
-    protected $title = '平台订单';
-
-    public function __construct()
+    public function index(Content $content): Content
     {
+        $total = PlatformOrderModel::getInstance()->getSumByPaymentAmount();
+        $totalIn = PlatformOrderModel::getInstance()->getSumByPaymentAmount(1);
+        $totalOut = PlatformOrderModel::getInstance()->getSumByPaymentAmount(0);
+
+        $fee = PlatformOrderModel::getInstance()->getSumByFee();
+        $feeIn = PlatformOrderModel::getInstance()->getSumByFee(1);
+        $feeOut = PlatformOrderModel::getInstance()->getSumByFee(0);
+
+        $currency = '人民币';
+        $box1 = new Widgets\Box('账单统计', '   <div class="box-body no-padding">
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href="#">
+            <i class="fa fa-map-marker text-red"></i> 平台营收:
+            <i class="fa  text-red"></i> 总额：<span style="color: red;font-weight:bold">'.$total.'</span> '.$currency.' ｜
+            <i class="fa  text-red"></i> 已入账：<span style="color: red;font-weight:bold">'.$totalIn.'</span> '.$currency.' ｜
+            <i class="fa  text-red"></i> 未入账：<span style="color: red;font-weight:bold">'.$totalOut.'</span> '.$currency.'
+            </a></li>
+            <li><a href="#">
+            <i class="fa fa-map-marker text-red"></i> 平台手续费:
+            <i class="fa  text-red"></i> 总额：<span style="color: red;font-weight:bold">'.$fee['sum'].'</span> '.$currency.' ｜
+            <i class="fa  text-red"></i> 已入账：<span style="color: red;font-weight:bold">'.$feeIn['sum'].'</span> '.$currency.' ｜
+            <i class="fa  text-red"></i> 未入账：<span style="color: red;font-weight:bold">'.$feeOut['sum'].'</span> '.$currency.'
+            </a></li>
+            <li>
+        </ul>
+    </div>','PS：闲鱼基础软件服务费：付款金额*0.6%');
+
+        return $content
+            ->title(__('Platform').__('Order'))
+            ->description(__('List'))
+            ->row($box1->style('primary')->collapsable())
+            ->row($this->grid());
     }
 
     /**
@@ -35,10 +67,18 @@ class PlatformOrderController extends BaseController
         $grid->column(PlatformOrderModel::F_id,__('ID'));
         $grid->column(PlatformOrderModel::F_customer_order_id,__('Customer').__('Tag'));
         $grid->column(PlatformOrderModel::F_payment_amount,__('Payment'). __('Amount'))->display(function () {
-            return "<font color='red'>".$this->payment_amount . '</font> ' . PlatformOrderModel::rtnEnumVal(PlatformOrderModel::CurrencyArray,$this->currency);
+            $status = $this->payment_amount_status ? "<span class='label label-success'>已入账</span> ":"<span class='label label-danger'>未入账</span>";
+
+            return $status." <span style='color: red'>".$this->payment_amount . '</span> ' .
+                PlatformOrderModel::rtnEnumVal(PlatformOrderModel::CurrencyArray,$this->currency);
         });
 
-        $grid->column(PlatformOrderModel::F_platform_fee,__('Platform'). __('Fee'))->editable();
+        $grid->column(PlatformOrderModel::F_platform_fee,__('Platform'). __('Fee'))->display(function () {
+            $status = $this->platform_fee_status ? "<span class='label label-success'>已入账</span> ":"<span class='label label-danger'>未入账</span>";
+
+            return $status." <span style='color: red'>".$this->platform_fee . '</span>  ';
+        });
+
         $grid->column(PlatformOrderModel::F_platform_type,__('Platform'). __('Type'))
             ->editable('select', PlatformOrderModel::rtnEnumLang(PlatformOrderModel::PlatformTypeArray));
 

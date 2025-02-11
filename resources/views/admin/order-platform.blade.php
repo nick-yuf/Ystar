@@ -1,22 +1,18 @@
 <style>
     .title {
-        font-size: 20px;
-        color: #636b6f;
-        font-family: 'Raleway', sans-serif;
-        font-weight: 50;
         display: block;
-        text-align: center;
-        margin: 10px 0 10px 0px;
+        margin: 10px 0 10px 10px;
     }
 
     .links {
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .links > span {
         color: #636b6f;
-        padding: 0 25px;
+        font-family: 'Raleway', sans-serif;
+        padding: 0 15px;
         font-size: 12px;
         font-weight: 600;
         letter-spacing: .1rem;

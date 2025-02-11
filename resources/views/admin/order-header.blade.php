@@ -6,12 +6,12 @@
         font-weight: 50;
         display: block;
         text-align: center;
-        margin: 10px 0 10px 0px;
+        margin: 10px 0 10px 10px;
     }
 
     .links {
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .links > span {
