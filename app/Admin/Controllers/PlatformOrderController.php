@@ -9,6 +9,9 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Widgets\Table;
 use Encore\Admin\Widgets;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\MessageBag;
+
 class PlatformOrderController extends BaseController
 {
     /**
@@ -154,8 +157,15 @@ class PlatformOrderController extends BaseController
         $form->select(PlatformOrderModel::F_platform_type, __('Platform').__('Type'))
             ->options($this->setLang(PlatformOrderModel::PlatformTypeArray))
             ->default(PlatformOrderModel::platform_type_1);
-        $form->text(PlatformOrderModel::F_payment_amount, __('Payment').__('Amount'))->default('');
-        $form->text(PlatformOrderModel::F_platform_fee, __('Platform').__('Fee'))->default('');
+        $form->text(PlatformOrderModel::F_payment_amount, __('Payment').__('Amount'))->default(0);
+        $states = [
+            'on'  => ['value' => 0, 'text' => '未入', 'color' => 'danger'],
+            'off' => ['value' => 1, 'text' => '已入', 'color' => 'success'],
+        ];
+        $form->switch(PlatformOrderModel::F_payment_amount_status, __('Payment').__('Amount').'入账状态')->states($states);
+
+        $form->text(PlatformOrderModel::F_platform_fee, __('Platform').__('Fee'))->disable();
+        $form->switch(PlatformOrderModel::F_platform_fee_status, __('Platform').__('Fee').'入账状态')->states($states);
 
         $form->select(PlatformOrderModel::F_currency, __('Currency'))
             ->options($this->setLang(PlatformOrderModel::CurrencyArray))
@@ -176,6 +186,17 @@ class PlatformOrderController extends BaseController
         $form->header(function ($actions) {
             $actions->disableView();
             $actions->disableDelete();
+        });
+
+        $form->saved(function (Form $form) {
+            $id = $form->model()->getAttribute(PlatformOrderModel::F_id);
+            if ($form->model()->getAttribute(PlatformOrderModel::F_platform_type) == PlatformOrderModel::platform_type_1 ) {
+                $fee = number_format($form->model()->getAttribute(PlatformOrderModel::F_payment_amount) * 0.006,2);
+                PlatformOrderModel::getInstance()->updateById($id,[
+                    PlatformOrderModel::F_platform_fee => $fee
+                ]);
+            }
+            return $form;
         });
 
         return $form;
