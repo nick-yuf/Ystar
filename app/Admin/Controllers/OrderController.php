@@ -177,8 +177,12 @@ class OrderController extends BaseController
                 $one = PlatformOrderModel::getInstance()->getOneById($id);
                 if($one) {
                     $platformName = PlatformOrderModel::rtnEnumVal(PlatformOrderModel::PlatformTypeArray,$one[PlatformOrderModel::F_platform_type]);
+                    $currency = PlatformOrderModel::rtnEnumVal(PlatformOrderModel::CurrencyArray,$one[PlatformOrderModel::F_currency]);
                     $one = [
-                        $one[PlatformOrderModel::F_id] =>'「'.$platformName.'」'. $one[PlatformOrderModel::F_customer_order_id]
+                        $one[PlatformOrderModel::F_id] =>
+                            '「'.$platformName.'」'.
+                            '「'.$one[PlatformOrderModel::F_customer_order_id].'」'.
+                            '「'.$one[PlatformOrderModel::F_payment_amount].$currency.'」'
                     ];
                 } else {
                     $one = [];
@@ -187,7 +191,11 @@ class OrderController extends BaseController
                 $data = PlatformOrderModel::getInstance()->getData(5,$id);
                 $data->each(function ($item)use(&$one) {
                     $platformName = PlatformOrderModel::rtnEnumVal(PlatformOrderModel::PlatformTypeArray,$item[PlatformOrderModel::F_platform_type]);
-                    $one[ $item[PlatformOrderModel::F_id]] ='「' . $platformName . '」' . $item[PlatformOrderModel::F_customer_order_id];
+                    $currency = PlatformOrderModel::rtnEnumVal(PlatformOrderModel::CurrencyArray,$item[PlatformOrderModel::F_currency]);
+                    $one[ $item[PlatformOrderModel::F_id]] =
+                        '「' . $platformName . '」' .
+                        '「' . $item[PlatformOrderModel::F_customer_order_id]. '」' .
+                        '「' . $item[PlatformOrderModel::F_payment_amount]. $currency. '」';
 
                     return $one;
                 });
