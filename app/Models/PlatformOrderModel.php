@@ -37,7 +37,7 @@ class PlatformOrderModel extends BaseModel
     //平台订单状态：1已付款，2待发货，3已发货，4已成交，5已退款
     const platform_status_1 = 1, platform_status_2 = 2, platform_status_3 = 3, platform_status_4 = 4, platform_status_5 = 5;
     const PlatformStatusArray = [
-        self::platform_status_1 => '已付款',
+//        self::platform_status_1 => '已付款',
         self::platform_status_2 => '待发货',
         self::platform_status_3 => '已发货',
         self::platform_status_4 => '已成交',
@@ -72,4 +72,16 @@ class PlatformOrderModel extends BaseModel
             ->first();
     }
 
+    public function getTotalByPlatformStatus($status = 0): int
+    {
+        return self::query()
+            ->where(self::F_platform_status, $status)
+            ->count();
+    }
+    public function getTotalByTravelStatus($status = 0): int
+    {
+        return self::query()
+            ->where(self::F_travel_status, $status)
+            ->count();
+    }
 }

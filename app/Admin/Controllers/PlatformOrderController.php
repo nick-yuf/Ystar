@@ -82,6 +82,20 @@ class PlatformOrderController extends BaseController
 //            $actions->disableDelete();
         });
 
+        //底部统计
+        $grid->footer(function () {
+            $data = $data1 = [];
+            foreach (PlatformOrderModel::PlatformStatusArray as $k => $v) {
+                $count = PlatformOrderModel::getInstance()->getTotalByPlatformStatus($k);
+                $data[__($v)] = $count;
+            }
+            foreach (PlatformOrderModel::TravelStatusArray as $k => $v) {
+                $count1 = PlatformOrderModel::getInstance()->getTotalByTravelStatus($k);
+                $data1[__($v)] = $count1;
+            }
+            return view('admin.order-platform', compact('data','data1'));
+        });
+
         return $grid;
     }
 
