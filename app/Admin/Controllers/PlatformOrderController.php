@@ -50,7 +50,7 @@ class PlatformOrderController extends BaseController
     </div>','<p style="margin-left: 15px">注明：<br>
     1. 已入账：金额结算到公共银行账户上<br>
     2. 未入账：金额结算在平台账户对应的支付账号内<br>
-    3. 手续费：闲鱼平台基础软件服务费计算方式（付款金额*0.6%） </p>');
+    3. 手续费：闲鱼平台，基础软件服务费计算方式（付款金额*0.6%），软件服务费当月超10单且总收入超1万（付款金额*1%）</p>');
 
         return $content
             ->title(__('Platform').__('Order'))
@@ -167,7 +167,7 @@ class PlatformOrderController extends BaseController
         ];
         $form->switch(PlatformOrderModel::F_payment_amount_status, __('Payment').__('Amount').'入账状态')->states($states);
 
-        $form->text(PlatformOrderModel::F_platform_fee, __('Platform').__('Fee'))->disable();
+        $form->text(PlatformOrderModel::F_platform_fee, __('Platform').__('Fee'))->default(0);
         $form->switch(PlatformOrderModel::F_platform_fee_status, __('Platform').__('Fee').'入账状态')->states($states);
 
         $form->select(PlatformOrderModel::F_currency, __('Currency'))
@@ -191,15 +191,11 @@ class PlatformOrderController extends BaseController
             $actions->disableDelete();
         });
 
-        $form->saved(function (Form $form) {
-            $id = $form->model()->getAttribute(PlatformOrderModel::F_id);
-            if ($form->model()->getAttribute(PlatformOrderModel::F_platform_type) == PlatformOrderModel::platform_type_1 ) {
-                $fee = number_format($form->model()->getAttribute(PlatformOrderModel::F_payment_amount) * 0.006,2);
-                PlatformOrderModel::getInstance()->updateById($id,[
-                    PlatformOrderModel::F_platform_fee => $fee
-                ]);
+        $form->saving(function (Form $form) {
+            if ($form->isCreating() && $form->platform_type == PlatformOrderModel::platform_type_1) {
+                $fee = number_format($form->payment_amount * 0.006,2);
+                $form->platform_fee = $fee;
             }
-            return $form;
         });
 
         return $form;
