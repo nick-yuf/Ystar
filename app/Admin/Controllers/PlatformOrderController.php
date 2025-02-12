@@ -40,7 +40,7 @@ class PlatformOrderController extends BaseController
             <i class="fa  text-red"></i> 未入账：<span style="color: red;font-weight:bold">'.$totalOut.'</span> '.$currency.'
             </a></li>
             <li><a href="#">
-            <i class="fa fa-map-marker text-red"></i> 平台手续费:
+            <i class="fa fa-map-marker text-red"></i> 平台服务费:
             <i class="fa  text-red"></i> 总额：<span style="color: red;font-weight:bold">'.$fee['sum'].'</span> '.$currency.' ｜
             <i class="fa  text-red"></i> 已入账：<span style="color: red;font-weight:bold">'.$feeIn['sum'].'</span> '.$currency.' ｜
             <i class="fa  text-red"></i> 未入账：<span style="color: red;font-weight:bold">'.$feeOut['sum'].'</span> '.$currency.'
@@ -50,7 +50,7 @@ class PlatformOrderController extends BaseController
     </div>','<p style="margin-left: 15px">注明：<br>
     1. 已入账：金额结算到公共银行账户上<br>
     2. 未入账：金额结算在平台账户对应的支付账号内<br>
-    3. 手续费：闲鱼平台，基础软件服务费计算方式（付款金额*0.6%），软件服务费当月超10单且总收入超1万（付款金额*1%）</p>');
+    3. 服务费：闲鱼平台，基础软件服务费计算方式（付款金额*0.6%），软件服务费当月超10单且总收入超1万（付款金额*1%）</p>');
 
         return $content
             ->title(__('Platform').__('Order'))
