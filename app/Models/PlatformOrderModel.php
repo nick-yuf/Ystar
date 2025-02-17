@@ -20,7 +20,7 @@ class PlatformOrderModel extends BaseModel
     /*
      * 数据库字段
      */
-    const F_id = 'id',F_platform_type = 'platform_type',F_platform_fee = 'platform_fee',F_platform_fee_status = 'platform_fee_status',F_payment_amount = 'payment_amount',F_payment_amount_status = 'payment_amount_status',F_currency = 'currency',F_platform_status = 'platform_status',F_travel_status = 'travel_status',F_customer_order_id = 'customer_order_id',F_created_at = 'created_at',F_updated_at = 'updated_at',F_deleted_at = 'deleted_at';
+    const F_id = 'id',F_platform_type = 'platform_type',F_platform_fee = 'platform_fee',F_platform_fee_rate = 'platform_fee_rate',F_platform_fee_status = 'platform_fee_status',F_payment_amount = 'payment_amount',F_payment_amount_status = 'payment_amount_status',F_currency = 'currency',F_platform_status = 'platform_status',F_travel_status = 'travel_status',F_customer_order_id = 'customer_order_id',F_created_at = 'created_at',F_updated_at = 'updated_at',F_deleted_at = 'deleted_at';
 
 
     //平台类型：1 闲鱼

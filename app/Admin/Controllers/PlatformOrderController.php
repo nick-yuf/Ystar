@@ -9,8 +9,6 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Widgets\Table;
 use Encore\Admin\Widgets;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\MessageBag;
 
 class PlatformOrderController extends BaseController
 {
@@ -82,9 +80,9 @@ class PlatformOrderController extends BaseController
         $grid->column(PlatformOrderModel::F_platform_fee,__('Platform'). __('Fee'))->display(function () {
             $status = $this->platform_fee_status ? "<span class='label label-success'>已入账</span> ":"<span class='label label-danger'>未入账</span>";
 
-            return $status." <span style='color: red'>".$this->platform_fee . '</span>  ';
+            return $status." <span style='color: red'>".$this->platform_fee . '</span>';
         });
-
+        $grid->column(PlatformOrderModel::F_platform_fee_rate,__('Fee').__('Rate'))->color('blue')->suffix('%');
         $grid->column(PlatformOrderModel::F_platform_type,__('Platform'). __('Type'))
             ->editable('select', PlatformOrderModel::rtnEnumLang(PlatformOrderModel::PlatformTypeArray));
 
@@ -166,8 +164,9 @@ class PlatformOrderController extends BaseController
             'off' => ['value' => 1, 'text' => '已入', 'color' => 'success'],
         ];
         $form->switch(PlatformOrderModel::F_payment_amount_status, __('Payment').__('Amount').'入账状态')->states($states);
+        $form->rate(PlatformOrderModel::F_platform_fee_rate, __('Platform').__('Fee').__('Rate'))->default(0.6)->width(1);
 
-        $form->text(PlatformOrderModel::F_platform_fee, __('Platform').__('Fee'))->default(0);
+        $form->text(PlatformOrderModel::F_platform_fee, __('Platform').__('Fee'))->disable();
         $form->switch(PlatformOrderModel::F_platform_fee_status, __('Platform').__('Fee').'入账状态')->states($states);
 
         $form->select(PlatformOrderModel::F_currency, __('Currency'))
@@ -192,8 +191,8 @@ class PlatformOrderController extends BaseController
         });
 
         $form->saving(function (Form $form) {
-            if ($form->isCreating() && $form->platform_type == PlatformOrderModel::platform_type_1) {
-                $fee = number_format($form->payment_amount * 0.006,2);
+            if ($form->platform_type == PlatformOrderModel::platform_type_1) {
+                $fee = number_format($form->payment_amount * $form->platform_fee_rate/100,2);
                 $form->platform_fee = $fee;
             }
         });
