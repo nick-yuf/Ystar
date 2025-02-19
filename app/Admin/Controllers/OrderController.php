@@ -170,7 +170,7 @@ class OrderController extends BaseController
         $form = new Form(new OrderModel());
         $form->text(OrderModel::F_customer_name, __('Customer name'))->default('');
         $form->text(OrderModel::F_customer_phone, __('Customer phone'))->default('');
-        $form->select(OrderModel::F_source, __('Source'))->options($this->setLang(OrderModel::SourceArray))->default(OrderModel::source_1);
+        $form->select(OrderModel::F_source, __('Source'))->options($this->setLang(OrderModel::SourceArray))->default(OrderModel::source_6);
         //新增平台 id
         $form->select(OrderModel::F_platform_order_id, __('Platform').__('Order'))
             ->options((function ($id) {
@@ -208,8 +208,8 @@ class OrderController extends BaseController
         $form->number(OrderModel::F_children_sum, __('Children') . __('Sum'))->max(100)->default(0);
         $form->number(OrderModel::F_box_sum, __('Luggage') . __('Sum'))->max(100)->default(0);
         $form->select(OrderModel::F_customer_type, __('Customer type'))->options($this->setLang(OrderModel::CustomerTypeArray))->default(OrderModel::customer_type_1);
-        $form->select(OrderModel::F_pay_type, __('Pay type'))->options($this->setLang(OrderModel::PayTypeArray))->default(OrderModel::pay_type_1);
-        $form->select(OrderModel::F_pay_currency, __('Pay currency'))->options($this->setLang(OrderModel::PayCurrencyArray))->default(OrderModel::pay_currency_1);
+        $form->select(OrderModel::F_pay_type, __('Pay type'))->options($this->setLang(OrderModel::PayTypeArray))->default(OrderModel::pay_type_3);
+        $form->select(OrderModel::F_pay_currency, __('Pay currency'))->options($this->setLang(OrderModel::PayCurrencyArray))->default(OrderModel::pay_currency_2);
         $form->select(OrderModel::F_pay_status, __('Pay status'))->options($this->setLang(OrderModel::PayStatusArray))->default(OrderModel::pay_status_1);
         $form->radio(OrderModel::F_status, __('Order') . __('Status'))->options($this->setLang(OrderModel::StatusArray))->default(OrderModel::status_1);
         $form->currency(OrderModel::F_expect_price, __('Expect price'))->symbol('RM');
@@ -217,8 +217,8 @@ class OrderController extends BaseController
         $form->currency(OrderModel::F_append_fees, __('Append fees'))->symbol('RM');
         $form->currency(OrderModel::F_payment_price, __('Payment price'))->symbol('RM');
         $form->currency(OrderModel::F_driver_commission, __('Driver commission'))->symbol('RM');
-        $form->select(OrderModel::F_payees_id, __('Payees'))->options('/api/payees/select-list')->required();
-        $form->select(OrderModel::F_car_id, __('Car'))->options('/api/car/select-list')->required();
+        $form->select(OrderModel::F_payees_id, __('Payees'))->options('/api/payees/select-list')->required()->default(9);
+        $form->select(OrderModel::F_car_id, __('Car'))->options('/api/car/select-list')->required()->default(6);
 
         $form->textarea(OrderModel::F_remark, __('Notes'))->rows(3);
         $form->table(OrderModel::F_trip_info, __('Trip info'), function ($table) {
