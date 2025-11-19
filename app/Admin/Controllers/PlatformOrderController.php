@@ -29,7 +29,7 @@ class PlatformOrderController extends BaseController
         $feeOut = PlatformOrderModel::getInstance()->getSumByFee(0);
 
         $currency = '人民币';
-        $box1 = new Widgets\Box('账单统计1', '   <div class="box-body no-padding">
+        $box1 = new Widgets\Box('账单统计', '   <div class="box-body no-padding">
         <ul class="nav nav-pills nav-stacked">
             <li><a href="#">
             <i class="fa fa-map-marker text-red"></i> 平台营收:
