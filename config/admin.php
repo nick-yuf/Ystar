@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Laravel-admin name1
+    | Laravel-admin name
     |--------------------------------------------------------------------------
     |
     | This value is the name of laravel-admin, This setting is displayed on the
